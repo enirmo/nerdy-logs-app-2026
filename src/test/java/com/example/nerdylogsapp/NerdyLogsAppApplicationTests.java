@@ -1,0 +1,13 @@
+package com.example.nerdylogsapp;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class NerdyLogsAppApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
