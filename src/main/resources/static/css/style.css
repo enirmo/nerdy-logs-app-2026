@@ -1,0 +1,124 @@
+:root {
+    --bg-dark: #392466;
+    --purple-deep: #60388d;
+    --purple-mid: #a96bb7;
+    --pink-soft: #ffc7dc;
+
+    --text-main: #fff7fb;
+    --text-muted: #d8bfdc;
+
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: cursive;
+    color: var(--text-main);
+    background:
+            radial-gradient(circle at 75% 25%, rgba(255, 199, 220, 0.22), transparent 28%),
+            radial-gradient(circle at 25% 80%, rgba(169, 107, 183, 0.35), transparent 32%),
+            linear-gradient(135deg, var(--bg-dark), var(--purple-deep) 55%, #2b1b52);
+    overflow: hidden;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    z-index: 5;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: var(--text-main);
+    padding: 18px 35px;
+    font-size: 1.3rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.nav-btn.ghost {
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+}
+
+.nav-btn.solid {
+    background: var(--pink-soft);
+    color: var(--bg-dark);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 10px 25px rgba(255, 199, 220, 0.25);
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 120px;
+}
+
+.logo img {
+    width: 45rem;
+    height: auto;
+}
+
+h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 300;
+    line-height: 0;
+    text-shadow: 0 0 30px rgba(255, 199, 220, 0.35);
+}
+
+.hero p {
+    margin-top: 8rem;
+    max-width: 540px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.shine {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255, 199, 220, 0.36), transparent 65%);
+    top: 18%;
+    right: 18%;
+    filter: blur(20px);
+    animation: floatShine 7s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes floatShine {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.55;
+    }
+
+    to {
+        transform: translate(-70px, 50px) scale(1.25);
+        opacity: 0.9;
+    }
+}
