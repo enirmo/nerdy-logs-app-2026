@@ -1,10 +1,11 @@
-package app.model.entity.libraryEntry;
+package app.model.entity.libraryentry;
 
 import app.model.entity.item.Item;
 import app.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -30,7 +31,10 @@ public class LibraryEntry {
     @Enumerated(EnumType.STRING)
     private EntryStatus entryStatus;
 
-    private int rating;
+    private Integer rating;
 
     private String reviewNotes;
+
+    private LocalDateTime addedOn;
+    private LocalDateTime completedOn;
 }

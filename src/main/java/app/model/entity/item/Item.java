@@ -34,6 +34,6 @@ public class Item {
     private Genre genre;
 
     //TODO: Map the table properly/set up relationships
-    private List<String> tags = new ArrayList<>();
+    // private List<String> tags = new ArrayList<>();
 
 }

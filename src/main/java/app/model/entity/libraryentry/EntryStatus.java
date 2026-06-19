@@ -1,4 +1,4 @@
-package app.model.entity.libraryEntry;
+package app.model.entity.libraryentry;
 
 public enum EntryStatus {
     COMPLETED,

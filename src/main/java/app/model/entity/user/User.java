@@ -1,8 +1,7 @@
 package app.model.entity.user;
 
-import app.model.entity.libraryEntry.LibraryEntry;
+import app.model.entity.libraryentry.LibraryEntry;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;

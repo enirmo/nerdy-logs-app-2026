@@ -1,4 +1,4 @@
-package app.mapper.libraryEntry;
+package app.mapper.libraryentry;
 
 public class LibraryEntryMapper {
 }
