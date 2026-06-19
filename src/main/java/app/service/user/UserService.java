@@ -3,7 +3,6 @@ import app.model.dto.user.UserRegisterRequest;
 import app.model.entity.user.Role;
 import app.model.entity.user.User;
 import app.repository.user.UserRepository;
-import app.service.library.LibraryService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,10 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final LibraryService libraryService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(PasswordEncoder passwordEncoder, LibraryService libraryService, UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
-        this.libraryService = libraryService;
         this.userRepository = userRepository;
     }
 
@@ -39,12 +36,12 @@ public class UserService {
 
         // -- Extra If new user, encode pass and register with chosen password
         String encodedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
-        userRegisterRequest.setPassword(encodedPassword);
 
         // 2. Create the user
          User user = User.builder()
                  .username(userRegisterRequest.getUsername())
                  .password(encodedPassword)
+                 .email(userRegisterRequest.getEmail())
                  .role(Role.USER)
                  .createdOn(now)
                  .updatedOn(now)
