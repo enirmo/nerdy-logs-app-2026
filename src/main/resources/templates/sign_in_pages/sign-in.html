@@ -20,12 +20,14 @@
         <h1>Sign In</h1>
         <p class="subtitle">Welcome back to your library!</p>
 
-        <form>
-            <label>Email</label>
-            <input type="email">
+        <form th:action="@{/sign-in}"
+              th:method="post"
+              th:object="${userLoginRequest}">
+            <label>Username</label>
+            <input type="text" th:field="*{username}">
 
             <label>Password</label>
-            <input type="password">
+            <input type="password" th:field="*{password}">
 
             <button class="auth-btn" type="submit">Sign In</button>
         </form>

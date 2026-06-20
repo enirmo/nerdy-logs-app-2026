@@ -20,14 +20,20 @@
         <h1>Sign In</h1>
         <p class="subtitle">Sign up to create your first nerdy library!</p>
 
-        <form>
+        <form th:action="@{/sign-up}"
+            th:method="post"
+            th:object="${userRegisterRequest}">
+
+            <label>Username</label>
+            <input type="text" th:field="*{username}">
+
             <label>Email</label>
-            <input type="email">
+            <input type="email" th:field ="*{email}">
 
             <label>Password</label>
-            <input type="password">
+            <input type="password" th:field="*{password}">
 
-            <button class="auth-btn" type="submit">Sign Up</button>
+            <button class="auth-btn" type="submit">Sign In</button>
         </form>
 
         <a href="/sign-in" class="switch-account">
