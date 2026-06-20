@@ -18,4 +18,9 @@ public class IndexController {
     public String getSignUpPage() {
             return "sign_in_pages/sign-up";
     }
+
+    @GetMapping("/my-nerd-log")
+    public String getLibraryPage() {
+        return "watchlist";
+    }
 }

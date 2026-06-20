@@ -1,0 +1,260 @@
+:root {
+    --bg-dark: #392466;
+    --purple-deep: #60388d;
+    --purple-mid: #a96bb7;
+    --pink-soft: #ffc7dc;
+    --text-main: #fff7fb;
+    --text-muted: #d8bfdc;
+
+    --page-bg: #160f26;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --card-border: rgba(255, 255, 255, 0.15);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: var(--text-main);
+    background:
+            radial-gradient(circle at 80% 20%, rgba(255, 199, 220, 0.12), transparent 28%),
+            linear-gradient(135deg, #160f26, #24143d 55%, #120b20);
+}
+
+/* TOP NAVBAR */
+
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 90px;
+
+    background: var(--purple-deep);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 42px;
+    z-index: 100;
+}
+
+.logo-link img {
+    width: 95px;
+    height: auto;
+    display: block;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 14px;
+}
+
+.category-tabs a {
+    text-decoration: none;
+    color: var(--text-main);
+
+    padding: 10px 18px;
+    border-radius: 999px;
+
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.category-tabs a:hover {
+    background: var(--pink-soft);
+    color: var(--bg-dark);
+    transform: translateY(-2px);
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 90px;
+    left: 0;
+
+    width: 260px;
+    height: calc(100vh - 90px);
+
+    background: var(--purple-deep);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+    padding: 36px 24px;
+    z-index: 90;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile img {
+    width: 115px;
+    height: 115px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid var(--pink-soft);
+    box-shadow: 0 0 25px rgba(255, 199, 220, 0.35);
+}
+
+.username {
+    margin-top: 14px;
+
+    color: var(--text-main);
+    text-decoration: none;
+
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.username:hover {
+    color: var(--pink-soft);
+}
+
+.side-tabs {
+    margin-top: 55px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.side-tabs a {
+    text-decoration: none;
+    color: var(--text-muted);
+
+    padding: 14px 18px;
+    border-radius: 16px;
+
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.side-tabs a:hover,
+.side-tabs a.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-main);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+/* MAIN CONTENT */
+
+.library-content {
+    margin-left: 260px;
+    padding: 130px 52px 70px;
+}
+
+.library-tools {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 42px;
+}
+
+.search-input,
+.filter-select {
+    padding: 14px 18px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    color: var(--text-main);
+
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-input {
+    width: 360px;
+}
+
+.filter-select {
+    cursor: pointer;
+}
+
+.search-input:focus,
+.filter-select:focus {
+    border-color: var(--pink-soft);
+    box-shadow: 0 0 18px rgba(255,199,220,0.22);
+}
+
+.library-section {
+    margin-bottom: 70px;
+    margin-left: 5px;
+}
+
+.library-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+
+    border-bottom: 4px solid rgba(255, 255, 255, 0.50);
+    border-radius: 10px;
+}
+
+.card-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+/* CARDS */
+
+.entry-card {
+    width: 210px;
+
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    transition: 0.25s ease;
+}
+
+.entry-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+            0 24px 55px rgba(0, 0, 0, 0.45),
+            0 0 20px rgba(255, 199, 220, 0.18);
+}
+
+.entry-card img {
+    width: 100%;
+    height: 290px;
+
+    object-fit: cover;
+    display: block;
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.entry-info {
+    padding: 16px;
+}
+
+.entry-info h3 {
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+}
+
+.entry-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}

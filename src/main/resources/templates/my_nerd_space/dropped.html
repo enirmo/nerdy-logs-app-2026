@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Library | Nerdy Logs</title>
+    <link rel="stylesheet" href="/static/css/library-style.css">
+</head>
+<body>
+
+<header class="top-navbar">
+    <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Nerdy Logs Logo">
+    </a>
+
+    <nav class="category-tabs">
+        <a href="#movies">Movies</a>
+        <a href="#series">Series</a>
+        <a href="#games">Games</a>
+        <a href="#anime">Anime</a>
+        <a href="#books">Books</a>
+    </nav>
+</header>
+
+<aside class="sidebar">
+    <div class="profile">
+        <img src="/images/default-profile.png" alt="Profile picture">
+        <a href="/profile" class="username">Username</a>
+    </div>
+
+    <nav class="side-tabs">
+        <a href="/library">Watchlist</a>
+        <a href="/library/watched">Completed</a>
+        <a href="/library/in-progress" >In Progress</a>
+        <a href="/library/dropped" class="active">Dropped</a>
+    </nav>
+</aside>
+
+<main class="library-content">
+
+    <section class="library-tools">
+        <input type="text" placeholder="Search your library..." class="search-input">
+
+        <select class="filter-select">
+            <option value="">All categories</option>
+            <option value="movies">Movies</option>
+            <option value="series">Series</option>
+            <option value="games">Games</option>
+            <option value="anime">Anime</option>
+            <option value="books">Books</option>
+        </select>
+
+        <select class="filter-select">
+            <option value="">Genre</option>
+            <option value="crime">Crime</option>
+            <option value="thriller">Thriller</option>
+            <option value="horror">Horror</option>
+            <option value="comedy">Comedy</option>
+            <option value="action">Action</option>
+            <option value="romance">Romance</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="other">Other</option>
+        </select>
+    </section>
+
+    <section class="library-section" id="movies">
+        <h2>Movies</h2>
+
+        <div class="card-row">
+
+            <!-- THYMELEAF MOVIES -->
+
+        </div>
+    </section>
+
+    <section class="library-section" id="series">
+        <h2>Series</h2>
+
+        <div class="card-row">
+
+            <!-- THYMELEAF SERIES -->
+
+        </div>
+    </section>
+
+    <section class="library-section" id="games">
+        <h2>Games</h2>
+
+        <div class="card-row">
+
+            <!-- THYMELEAF GAMES -->
+
+        </div>
+    </section>
+
+    <section class="library-section" id="anime">
+        <h2>Anime</h2>
+
+        <div class="card-row">
+
+            <!-- THYMELEAF ANIME -->
+
+        </div>
+    </section>
+
+    <section class="library-section" id="books">
+        <h2>Books</h2>
+
+        <div class="card-row">
+
+            <!-- THYMELEAF BOOKS -->
+
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
