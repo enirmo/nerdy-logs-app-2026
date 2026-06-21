@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | Nerdy Logs</title>
+
+    <link rel="stylesheet" href="/css/library-style.css">
+    <link rel="stylesheet" href="/css/admin-style.css">
+</head>
+<body>
+
+<header class="top-navbar">
+    <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Nerdy Logs Logo">
+    </a>
+
+    <nav class="category-tabs">
+        <a href="/admin/changelog">Admin changelog</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main class="admin-content">
+
+    <section class="admin-header">
+        <h1>Admin Panel</h1>
+    </section>
+
+    <section class="admin-section">
+        <div class="section-title">
+            <h2>Catalog Management</h2>
+            <button class="admin-btn primary">+ Add Item</button>
+        </div>
+
+        <div class="admin-tools">
+            <input type="text" placeholder="Search catalog..." class="admin-input">
+
+            <select class="admin-select">
+                <option>All Categories</option>
+                <option>Movies</option>
+                <option>Series</option>
+                <option>Games</option>
+                <option>Anime</option>
+                <option>Books</option>
+            </select>
+        </div>
+
+        <div class="admin-table">
+            <div class="table-row table-head">
+                <span>Title</span>
+                <span>Category</span>
+                <span>Genre</span>
+                <span>Actions</span>
+            </div>
+
+            <div class="table-row" th:each="item : ${catalogItems}">
+
+                <a th:href="@{/admin/catalog/{id}(id=${item.id})}"
+                   th:text="${item.name}"
+                   class="item-title">
+                    Item Title
+                </a>
+
+                <span th:text="${item.mediumType}">Category</span>
+                <span th:text="${item.genre}">Genre</span>
+                <span class="actions">
+                    <a th:href="@{/admin/catalog/{id}/edit(id=${item.id})}" class="small-btn edit">Edit</a>
+
+                    <form th:action="@{/admin/catalog/{id}/delete(id=${item.id})}" method="post">
+                        <button type="submit" class="small-btn danger">Remove</button>
+                    </form>
+                </span>
+
+                <div th:if="${#lists.isEmpty(catalogItems)}" class="empty-state">
+                    No catalog items found.
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="admin-section">
+        <div class="section-title">
+            <h2>User Search</h2>
+        </div>
+
+        <div class="admin-tools">
+            <input type="text" placeholder="Search users by username or email..." class="admin-input wide">
+            <button class="admin-btn">Search</button>
+        </div>
+
+        <div class="user-results">
+            <article class="user-card" th:each="user : ${users}">
+
+                <img th:src="${user.profilePicture}"
+                     src="/images/default-pfp.jpg"
+                     alt="User profile">
+
+                <div>
+                    <h3 th:text="${user.username}">Username</h3>
+                    <p th:text="'@' + ${user.username}">@username</p>
+                </div>
+
+                <a th:href="@{/admin/users/{id}(id=${user.id})}" class="small-btn view">
+                    View Profile
+                </a>
+
+                <div th:if="${#lists.isEmpty(users)}" class="empty-state">
+                    No users found.
+                </div>
+            </article>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

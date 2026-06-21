@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Library | Nerdy Logs</title>
+  <link rel="stylesheet" href="/css/profile-style.css">
+  <link rel="stylesheet" href="/css/library-style.css">
+</head>
+
+<body>
+
+<header class="top-navbar">
+  <a href="/" class="logo-link">
+    <img src="/images/logo.png" alt="Logo">
+  </a>
+
+  <nav class="category-tabs">
+    <a href="/movies">Movies</a>
+    <a href="/series">Series</a>
+    <a href="/games">Games</a>
+    <a href="/anime">Anime</a>
+    <a href="/books">Books</a>
+  </nav>
+</header>
+
+<main class="profile-content">
+
+  <section class="profile-header">
+
+    <img th:src="${user.profilePicture}"
+         src="/images/default-pfp.png"
+         alt="Profile"
+         class="profile-picture">
+
+    <h1 th:text="${user.username}">Username</h1>
+
+    <p class="username"
+       th:text="'@' + ${user.username}">
+      @username
+    </p>
+
+    <p class="bio"
+       th:text="${user.bio}">
+      Tell me your secrets here!
+    </p>
+
+      <button class="edit-btn">
+        Edit Profile
+      </button>
+
+    </div>
+
+  </section>
+
+  <section class="stats-section">
+
+    <h2>Completed Statistics</h2>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <span>Movies</span>
+        <strong th:text="${stats.moviesCompleted}">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Series</span>
+        <strong th:text="${stats.seriesCompleted}">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Games</span>
+        <strong th:text="${stats.gamesCompleted}">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Anime</span>
+        <strong th:text="${stats.animeCompleted}">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Books</span>
+        <strong th:text="${stats.booksCompleted}">0</strong>
+      </div>
+
+      <div class="stat-card total">
+        <span>Total Completed</span>
+        <strong th:text="${stats.totalCompleted}">0</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="recent-section">
+
+    <h2>Recently Completed</h2>
+    <div class="recent-grid">
+      <div class="recent-card"
+           th:each="entry : ${recentlyCompleted}"
+           th:text="${entry.title}">
+        Example Title
+      </div>
+    </div>
+
+  </section>
+
+
+  <section class="profile-lists-section">
+    <h2>Your Lists</h2>
+
+    <div class="profile-list-links">
+      <a href="/watchlist">Watchlist</a>
+      <a href="/in-progress">In Progress</a>
+      <a href="/completed">Completed</a>
+      <a href="/dropped">Dropped</a>
+    </div>
+  </section>
+
+</main>
+</body>

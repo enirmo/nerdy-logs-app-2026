@@ -7,8 +7,11 @@ import app.model.entity.user.User;
 import app.repository.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -21,6 +24,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.userProperties = userProperties;
+    }
+
+    public User getById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public void register(UserRegisterRequest userRegisterRequest){
