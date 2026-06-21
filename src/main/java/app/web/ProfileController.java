@@ -43,4 +43,12 @@ public class ProfileController {
 
         return "profile/admin";
     }
+
+    @GetMapping("/admin/changelog")
+    public String getHistoryPage(Model model) {
+
+        //model.addAttribute("logs", adminLogService.getAllLogs());
+
+        return "profile/admin-changelog";
+    }
 }

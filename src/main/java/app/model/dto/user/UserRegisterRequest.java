@@ -8,17 +8,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static app.messages.ErrorMessages.PASSWORD_SIZE;
+import static app.messages.ErrorMessages.USERNAME_SIZE;
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegisterRequest {
     @NotBlank
-    @Size(min = 4, max = 20, message = "Username must be at least 4 and max 20 characters.")
+    @Size(min = 4, max = 20, message = USERNAME_SIZE)
     private String username;
 
     @NotBlank
-    @Size(min = 6, message = "Password must be at least 6 characters.")
+    @Size(min = 6, message = PASSWORD_SIZE)
     private String password;
 
     @NotBlank

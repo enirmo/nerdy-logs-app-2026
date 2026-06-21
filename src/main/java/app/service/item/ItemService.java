@@ -4,22 +4,28 @@ import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
 import app.repository.item.ItemRepository;
+import app.service.adminlog.AdminLogService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+import static app.messages.ErrorMessages.ITEM_ALREADY_ADDED;
+import static app.messages.ErrorMessages.ITEM_NOT_FOUND;
+
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final AdminLogService adminLogService;
 
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, AdminLogService adminLogService) {
         this.itemRepository = itemRepository;
+        this.adminLogService = adminLogService;
     }
 
     // Helper to check if item exists
     private Item getItemOrThrow(UUID itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("Item not found."));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException(ITEM_NOT_FOUND));
 
         return item;
     }
@@ -29,7 +35,7 @@ public class ItemService {
     public void createItem(ItemRequest itemRequest) {
         itemRepository.findByName(itemRequest.getItemName())
                 .ifPresent(item -> {
-                    throw new IllegalArgumentException(itemRequest.getItemName() + " is already added.");
+                    throw new IllegalArgumentException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
                 });
 
         // Note that description, pictureCover and releaseYear are not mandatory fields, so they can be null
@@ -43,6 +49,8 @@ public class ItemService {
                 .build();
 
         itemRepository.save(item);
+
+        adminLogService.logAction("Added item \"" + item.getName() + "\" to library");
     }
 
 
@@ -61,7 +69,7 @@ public class ItemService {
     }
 
 
-    public List<Item> getItemsByMediaType(Medium mediaType) {
+    public List<Item> getItemsByMediumType(Medium mediaType) {
         List<Item> items = getAllItems()
                 .stream()
                 .filter(item -> item.getMediumType() == mediaType)
@@ -94,5 +102,7 @@ public class ItemService {
         Item item = getItemOrThrow(itemId);
 
         itemRepository.delete(item);
+
+        adminLogService.logAction("Deleted item \"" + item.getName() + "\" from library.");
     }
 }

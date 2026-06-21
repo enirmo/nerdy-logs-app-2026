@@ -8,17 +8,19 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
+import static app.messages.ErrorMessages.*;
+
 @Builder
 @Data
 public class ItemRequest {
     @NotBlank
-    @Size(min = 1, max = 255, message = "Entry must have a name with less than 255 characters")
+    @Size(min = 1, max = 255, message = ENTRY_NAME_SIZE)
     private String itemName;
 
-    @NotNull(message = "You must choose a category/medium")
+    @NotNull(message = MEDIUM_REQUIRED)
     private Medium medium;
 
-    @NotNull(message = "You must select a genre")
+    @NotNull(message = GENRE_REQUIRED)
     private Genre genre;
 
     private String description;

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Changelog | Nerdy Logs</title>
+
+    <link rel="stylesheet" href="/css/library-style.css">
+    <link rel="stylesheet" href="/css/admin-changelog-style.css">
+</head>
+<body>
+
+<header class="top-navbar">
+    <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Nerdy Logs Logo">
+    </a>
+
+    <nav class="category-tabs">
+        <a href="/admin">Admin Panel</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main class="history-content">
+
+    <section class="history-header">
+        <h1>Admin Changelog</h1>
+        <p>Track every administrative action performed in the system.</p>
+    </section>
+
+    <section class="history-section">
+
+        <div class="history-tools">
+            <input
+                    type="text"
+                    class="history-search"
+                    placeholder="Search actions...">
+        </div>
+
+        <div class="history-table">
+
+            <div class="history-row history-head">
+                <span>Action Taken</span>
+                <span>When</span>
+            </div>
+
+            <div class="history-row" th:each="log : ${logs}">
+                <span th:text="${log.action}">
+                    Added item "Elden Ring"
+                </span>
+
+                <span th:text="${#temporals.format(log.createdOn,'dd MMM yyyy HH:mm')}">
+                    30 Jun 2026 19:45
+                </span>
+            </div>
+
+        </div>
+
+        <div th:if="${#lists.isEmpty(logs)}" class="empty-state">
+            No admin actions recorded yet.
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

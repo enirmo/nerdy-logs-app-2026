@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} + ' | Nerdy Logs'">Category | Nerdy Logs</title>
+
+    <link rel="stylesheet" href="/css/library-style.css">
+    <link rel="stylesheet" href="/css/medium-style.css">
+</head>
+<body>
+
+<header class="top-navbar">
+    <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Nerdy Logs Logo">
+    </a>
+
+    <nav class="category-tabs">
+        <a href="/movies">Movies</a>
+        <a href="/series">Series</a>
+        <a href="/games">Games</a>
+        <a href="/anime">Anime</a>
+        <a href="/books">Books</a>
+    </nav>
+</header>
+
+<aside class="sidebar">
+    <div class="profile">
+        <img src="/images/default-profile.png" alt="Profile picture">
+        <a href="/profile" class="username">Username</a>
+    </div>
+
+    <nav class="side-tabs">
+        <a href="/watchlist">Watchlist</a>
+        <a href="/completed">Completed</a>
+        <a href="/in-progress" >In Progress</a>
+        <a href="/dropped">Dropped</a>
+    </nav>
+</aside>
+
+<main class="category-content">
+
+    <section class="category-header">
+        <h1 th:text="${pageTitle}">Movies</h1>
+    </section>
+
+    <section class="category-tools">
+        <input type="text" placeholder="Search this category..." class="search-input">
+
+        <select class="filter-select">
+            <option>All Genres</option>
+            <option>Action</option>
+            <option>Drama</option>
+            <option>Fantasy</option>
+            <option>Horror</option>
+            <option>RPG</option>
+        </select>
+    </section>
+
+
+
+    <section class="category-grid">
+
+        <article class="entry-card" th:each="item : ${items}">
+            <img th:src="${item.pictureCover}" alt="Cover">
+
+            <div class="entry-info">
+                <h3 th:text="${item.name}">Item Name</h3>
+
+                <p>
+                    <span th:text="${item.releaseYear}">2024</span>
+                    ·
+                    <span th:text="${item.genre}">Genre</span>
+                </p>
+
+                <a href="/sign-in" class="add-list-btn">
+                    Add to My List
+                </a>
+            </div>
+        </article>
+
+    </section>
+
+    <div th:if="${#lists.isEmpty(items)}" class="empty-state">
+        No items found in this category yet.
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static app.messages.ErrorMessages.*;
+
 @Service
 public class LibraryService {
     private final LibraryRepository libraryRepository;
@@ -27,17 +29,17 @@ public class LibraryService {
 
     // Error helpers to keep the rest of the methods clean
     private User getUserOrThrow(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
 
         return user;
     }
     private Item getItemOrThrow(UUID itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("Item not found."));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException(ITEM_NOT_FOUND));
 
         return item;
     }
     private LibraryEntry getEntryOrThrow(UUID entryId) {
-        LibraryEntry entry = libraryRepository.findById(entryId).orElseThrow(() -> new IllegalArgumentException("Entry not found."));
+        LibraryEntry entry = libraryRepository.findById(entryId).orElseThrow(() -> new IllegalArgumentException(ENTRY_NOT_FOUND));
 
         return entry;
     }
@@ -56,7 +58,7 @@ public class LibraryService {
 
         libraryRepository.findByUserAndItem(user, item)
                 .ifPresent(i -> {
-                   throw new IllegalArgumentException("Item already exists in this library.");
+                   throw new IllegalArgumentException(ITEM_ALREADY_EXISTS_IN_LIBRARY);
                 });
 
         LibraryEntry entry = new LibraryEntry();
