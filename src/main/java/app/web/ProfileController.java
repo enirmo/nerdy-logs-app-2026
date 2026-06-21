@@ -21,7 +21,7 @@ public class ProfileController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/profile")
     public String getUserPage(HttpSession session, Model model) {
         UUID userId = (UUID) session.getAttribute("user_id");
 

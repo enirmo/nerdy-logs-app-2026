@@ -49,4 +49,5 @@ public class MediaController {
         model.addAttribute("items", itemService.getItemsByMediumType(Medium.BOOK));
         return "media_tabs/medium";
     }
+
 }

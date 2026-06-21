@@ -1,4 +1,5 @@
 package app.config;
+import app.model.entity.user.Role;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "users")
 public class UserProperties {
 
+    private DefaultUser defaultAdmin;
     private DefaultUser defaultUser;
 
     @Data
@@ -17,5 +19,6 @@ public class UserProperties {
         private String email;
         private String password;
         private String profilePicture;
+        private Role role;
     }
 }

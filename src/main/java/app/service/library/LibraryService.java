@@ -7,6 +7,7 @@ import app.model.entity.user.User;
 import app.repository.item.ItemRepository;
 import app.repository.library.LibraryRepository;
 import app.repository.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class LibraryService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
+    @Autowired
     public LibraryService(LibraryRepository libraryRepository, ItemRepository itemRepository, UserRepository userRepository) {
         this.libraryRepository = libraryRepository;
         this.itemRepository = itemRepository;
@@ -122,5 +124,11 @@ public class LibraryService {
         LibraryEntry entry = getEntryOrThrow(entryId);
 
         libraryRepository.delete(entry);
+    }
+
+    public List<LibraryEntry> getEntriesByStatus(UUID userId, EntryStatus status) {
+        List<LibraryEntry> entriesByStatus = libraryRepository.findByUserIdAndEntryStatus(userId, status);
+
+        return entriesByStatus;
     }
 }

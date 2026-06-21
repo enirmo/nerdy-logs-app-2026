@@ -2,6 +2,7 @@ package app.web;
 
 import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
+import app.model.entity.user.Role;
 import app.model.entity.user.User;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -39,8 +40,13 @@ public class IndexController {
         User user = userService.login(userLoginRequest);
 
         session.setAttribute("user_id", user.getId());
+        session.setAttribute("role", user.getRole());
 
-        return "redirect:/my-nerd-log";
+        if (user.getRole() == Role.ADMIN) {
+            return "redirect:/admin";
+        }
+
+        return "redirect:/watchlist";
     }
 
     // REGISTER MAP and POST
@@ -56,8 +62,10 @@ public class IndexController {
         return "redirect:/sign-in";
     }
 
-    @GetMapping("/my-nerd-log")
-    public String getLibraryPage() {
-        return "my_nerd_space/watchlist";
+    // LOGOUT
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 }
