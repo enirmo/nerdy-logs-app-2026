@@ -5,6 +5,7 @@ import app.service.item.ItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MediaController {
@@ -15,38 +16,50 @@ public class MediaController {
         this.itemService = itemService;
     }
 
+    // ADD ITEM for each category
+
     @GetMapping("/movies")
-    public String movies(Model model) {
+    public String movies(@RequestParam(required = false) String search, Model model) {
         model.addAttribute("pageTitle", "Movies");
-        model.addAttribute("items", itemService.getItemsByMediumType(Medium.MOVIE));
+        model.addAttribute("items", itemService.searchByMedium(Medium.MOVIE, search));
+        model.addAttribute("currentPath", "/movies");
+        model.addAttribute("search", search);
         return "media_tabs/medium";
     }
 
     @GetMapping("/series")
-    public String series(Model model) {
+    public String series(@RequestParam(required = false) String search, Model model) {
         model.addAttribute("pageTitle", "Series");
-        model.addAttribute("items", itemService.getItemsByMediumType(Medium.SERIES));
+        model.addAttribute("items", itemService.searchByMedium(Medium.SERIES, search));
+        model.addAttribute("currentPath", "/series");
+        model.addAttribute("search", search);
         return "media_tabs/medium";
     }
 
     @GetMapping("/games")
-    public String games(Model model) {
+    public String games(@RequestParam(required = false) String search, Model model) {
         model.addAttribute("pageTitle", "Games");
-        model.addAttribute("items", itemService.getItemsByMediumType(Medium.GAME));
+        model.addAttribute("items", itemService.searchByMedium(Medium.GAME, search));
+        model.addAttribute("currentPath", "/games");
+        model.addAttribute("search", search);
         return "media_tabs/medium";
     }
 
     @GetMapping("/anime")
-    public String anime(Model model) {
+    public String anime(@RequestParam(required = false) String search, Model model) {
         model.addAttribute("pageTitle", "Anime");
-        model.addAttribute("items", itemService.getItemsByMediumType(Medium.ANIME));
+        model.addAttribute("items", itemService.searchByMedium(Medium.ANIME, search));
+        model.addAttribute("currentPath", "/anime");
+        model.addAttribute("search", search);
         return "media_tabs/medium";
     }
 
     @GetMapping("/books")
-    public String books(Model model) {
+    public String books(@RequestParam(required = false) String search, Model model) {
         model.addAttribute("pageTitle", "Books");
-        model.addAttribute("items", itemService.getItemsByMediumType(Medium.BOOK));
+        model.addAttribute("items", itemService.searchByMedium(Medium.BOOK, search));
+        model.addAttribute("currentPath", "/books");
+        model.addAttribute("search", search);
         return "media_tabs/medium";
     }
 

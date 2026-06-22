@@ -105,4 +105,15 @@ public class ItemService {
 
         adminLogService.logAction("Deleted item \"" + item.getName() + "\" from library.");
     }
+
+    public List<Item> searchByMedium(Medium medium, String searchTerm) {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return getItemsByMediumType(medium);
+        }
+
+        return itemRepository.findByMediumTypeAndNameContainingIgnoreCase(
+                medium,
+                searchTerm
+        );
+    }
 }

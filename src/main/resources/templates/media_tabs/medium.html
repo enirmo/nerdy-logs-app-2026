@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/library-style.css">
     <link rel="stylesheet" href="/css/medium-style.css">
 </head>
+
 <body>
 
 <header class="top-navbar">
@@ -58,7 +59,15 @@
     </section>
 
     <section class="category-tools">
-        <input type="text" placeholder="Search this category..." class="search-input">
+        <form method="get" th:action="@{${currentPath}}" class="search-form">
+            <input type="text"
+                   name="search"
+                   placeholder="Search this category..."
+                   class="search-input"
+                   th:value="${search}">
+
+            <button class="search-btn" type="submit">Search</button>
+        </form>
 
         <select class="filter-select">
             <option>All Genres</option>
@@ -86,9 +95,30 @@
                     <span th:text="${item.genre}">Genre</span>
                 </p>
 
-                <a href="/sign-in" class="add-list-btn">
-                    Add to My List
-                </a>
+                <form th:action="@{/library/add}" method="post" class="add-to-list-form">
+
+                    <!-- Item being added -->
+                    <input type="hidden"
+                           name="itemId"
+                           th:value="${item.id}">
+
+                    <!-- Current page -->
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="entryStatus" class="list-select">
+                        <option value="PLANNED">Watchlist</option>
+                        <option value="STARTED">In Progress</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="DROPPED">Dropped</option>
+                    </select>
+
+                    <button type="submit" class="add-list-btn">
+                        Add to My List
+                    </button>
+
+                </form>
             </div>
         </article>
 
@@ -99,6 +129,21 @@
     </div>
 
 </main>
+
+<script>
+    document.querySelectorAll(".add-to-list-form").forEach(form => {
+        form.addEventListener("submit", function () {
+            const button = this.querySelector(".add-list-btn");
+
+            button.textContent = "✓ Added!";
+            button.disabled = true;
+
+            setTimeout(() => {
+                this.submit();
+            }, 1200);
+        });
+    });
+</script>
 
 </body>
 </html>

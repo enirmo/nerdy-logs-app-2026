@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin Panel | Nerdy Logs</title>
@@ -29,8 +29,71 @@
     <section class="admin-section">
         <div class="section-title">
             <h2>Catalog Management</h2>
-            <button class="admin-btn primary">+ Add Item</button>
+            <a href="/admin/items/add" class="admin-btn primary">+ Add Item</a>
         </div>
+
+        <section class="add-item-panel" th:if="${showAddForm}">
+            <div class="add-item-header">
+                <h3>Add New Item</h3>
+                <a href="/admin" class="small-btn cancel">Cancel</a>
+            </div>
+
+            <form th:action="@{/admin/items/add}"
+                  th:object="${itemRequest}"
+                  method="post"
+                  class="add-item-form">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" th:field="*{itemName}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Release Year</label>
+                        <input type="number" th:field="*{releaseYear}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Medium</label>
+                        <select th:field="*{medium}">
+                            <option value="">Select medium</option>
+                            <option th:each="medium : ${mediums}"
+                                    th:value="${medium}"
+                                    th:text="${medium}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <select th:field="*{genre}">
+                            <option value="">Select genre</option>
+                            <option th:each="genre : ${genres}"
+                                    th:value="${genre}"
+                                    th:text="${genre}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Cover Image URL</label>
+                    <input type="text" th:field="*{pictureCover}">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea th:field="*{description}"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="admin-btn primary">Save Item</button>
+                </div>
+            </form>
+        </section>
 
         <div class="admin-tools">
             <input type="text" placeholder="Search catalog..." class="admin-input">
@@ -53,7 +116,7 @@
                 <span>Actions</span>
             </div>
 
-            <div class="table-row" th:each="item : ${catalogItems}">
+            <div class="table-row" th:each="item : ${items}">
 
                 <a th:href="@{/admin/catalog/{id}(id=${item.id})}"
                    th:text="${item.name}"
@@ -71,7 +134,7 @@
                     </form>
                 </span>
 
-                <div th:if="${#lists.isEmpty(catalogItems)}" class="empty-state">
+                <div th:if="${#lists.isEmpty(items)}" class="empty-state">
                     No catalog items found.
                 </div>
 
@@ -111,6 +174,10 @@
             </article>
         </div>
     </section>
+
+
+
+    </form>
 
 </main>
 

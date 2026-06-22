@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -103,5 +105,27 @@ public class ListsController {
                 model,
                 session);
     }
+
+    @PostMapping("/library/add")
+    public String addToLibrary(@RequestParam UUID itemId,
+                               @RequestParam EntryStatus entryStatus,
+                               @RequestParam String redirectTo,
+                               HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        if (redirectTo == null || redirectTo.isBlank()) {
+            redirectTo = "/sign-in";
+        }
+
+        libraryService.addItemToLibrary(userId, itemId, entryStatus);
+
+        return "redirect:" + redirectTo;
+    }
+
+
 }
 
