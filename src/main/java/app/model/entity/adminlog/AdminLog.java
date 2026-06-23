@@ -1,6 +1,5 @@
 package app.model.entity.adminlog;
 
-import app.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

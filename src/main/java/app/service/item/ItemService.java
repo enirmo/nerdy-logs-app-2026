@@ -49,12 +49,10 @@ public class ItemService {
                 .build();
 
         itemRepository.save(item);
-
-        adminLogService.logAction("Added item \"" + item.getName() + "\" to library");
     }
 
 
-
+    // GET items
     public Item getItem(UUID itemId) {
         Item item = getItemOrThrow(itemId);
 
@@ -78,6 +76,8 @@ public class ItemService {
         return items;
     }
 
+
+    // Update
     public void updateItem(UUID itemId, ItemRequest request) {
         Item item = getItemOrThrow(itemId);
 
@@ -91,7 +91,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-
+    // Delete
     public void deleteItem(UUID itemId) {
         Item item = getItemOrThrow(itemId);
 
@@ -100,6 +100,8 @@ public class ItemService {
         adminLogService.logAction("Deleted item \"" + item.getName() + "\" from library.");
     }
 
+
+    // Search
     public List<Item> searchByMedium(Medium medium, String searchTerm) {
         if (searchTerm == null || searchTerm.isBlank()) {
             return getItemsByMediumType(medium);

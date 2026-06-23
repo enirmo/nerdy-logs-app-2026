@@ -8,7 +8,6 @@ import app.repository.user.UserRepository;
 import app.service.adminlog.AdminLogService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,8 +75,12 @@ public class UserService {
 
         // To self: No point in bringing this to mapper, when register() has the job of creating
         // the User itself
+        // Note that most of these comments I made for myself during creation to keep the project structured while learning
     }
 
+
+
+    // Login
     public User login(UserLoginRequest userLoginRequest) {
         User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow(() -> new IllegalArgumentException(USERNAME_DOES_NOT_EXIST));
 
@@ -90,10 +93,19 @@ public class UserService {
             throw new IllegalArgumentException(WRONG_PASSWORD);
         }
 
-        String username = userLoginRequest.getUsername();
-        String password = userLoginRequest.getPassword();
-
         return user;
+    }
+
+    // Update profile - user side
+    public void updateProfile(UUID userId, String profilePicture, String bio) {
+        User user = getById(userId);
+
+        user.setProfilePicture(profilePicture);
+        user.setBio(bio);
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+
     }
 
     // Delete user - this is for admins
@@ -105,6 +117,7 @@ public class UserService {
         adminLogService.logAction(String.format("Deleted user %s", user.getUsername()));
     }
 
+    // Search users - for admins
     public List<User> searchUsers(String search) {
         if (search == null || search.isBlank()) {
             return getAllUsers();
@@ -113,14 +126,4 @@ public class UserService {
         return userRepository.findByUsernameContainingIgnoreCase(search);
     }
 
-    public void updateProfile(UUID userId, String profilePicture, String bio) {
-        User user = getById(userId);
-
-        user.setProfilePicture(profilePicture);
-        user.setBio(bio);
-        user.setUpdatedOn(LocalDateTime.now());
-
-        userRepository.save(user);
-
-    }
 }

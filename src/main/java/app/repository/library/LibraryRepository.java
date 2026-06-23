@@ -14,7 +14,6 @@ import java.util.UUID;
 @Repository
 public interface LibraryRepository extends JpaRepository<LibraryEntry, UUID> {
 
-    Optional<Object> findByItem(Item item);
     Optional<LibraryEntry> findByUserAndItem(User user, Item item);
 
     List<LibraryEntry> findByUserIdAndEntryStatus(UUID userId, EntryStatus entryStatus);
@@ -25,5 +24,4 @@ public interface LibraryRepository extends JpaRepository<LibraryEntry, UUID> {
             String itemName
     );
 
-    List<LibraryEntry> findByUserAndEntryStatus(User user, EntryStatus status);
 }

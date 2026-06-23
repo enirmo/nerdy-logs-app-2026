@@ -1,7 +1,6 @@
 package app.repository.adminlog;
 
 import app.model.entity.adminlog.AdminLog;
-import jakarta.persistence.OrderBy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

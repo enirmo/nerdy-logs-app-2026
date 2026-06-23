@@ -1,7 +1,6 @@
 package app.service.adminlog;
 
 import app.model.entity.adminlog.AdminLog;
-import app.model.entity.user.User;
 import app.repository.adminlog.AdminLogRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,12 @@ public class AdminLogService {
         this.adminLogRepository = adminLogRepository;
     }
 
+
+    public List<AdminLog> findAll() {
+        return adminLogRepository.findAllByOrderByCreatedOnDesc();
+    }
+
+    // Admin action history
     public void logAction(String action) {
         AdminLog adminLog = AdminLog.builder()
                 .action(action)
@@ -26,10 +31,8 @@ public class AdminLogService {
         adminLogRepository.save(adminLog);
     }
 
-    public List<AdminLog> findAll() {
-        return adminLogRepository.findAllByOrderByCreatedOnDesc();
-    }
 
+    // Search action history
     public List<AdminLog> searchLogs(String query) {
         if (query == null || query.isBlank()) {
             return findAll();

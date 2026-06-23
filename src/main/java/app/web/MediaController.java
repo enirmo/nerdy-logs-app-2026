@@ -22,6 +22,8 @@ public class MediaController {
         this.userService = userService;
     }
 
+
+    // Helper
     private void addLoggedUser(Model model, HttpSession session) {
         UUID userId = (UUID) session.getAttribute("user_id");
 
@@ -31,7 +33,6 @@ public class MediaController {
     }
 
     // ADD ITEM for each category
-
     @GetMapping("/movies")
     public String movies(@RequestParam(required = false) String search, Model model, HttpSession session) {
         model.addAttribute("pageTitle", "Movies");

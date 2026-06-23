@@ -26,6 +26,8 @@ public class ListsController {
         this.libraryService = libraryService;
     }
 
+
+    // Helpers
     private List<LibraryEntry> filterByMedium(List<LibraryEntry> entries, Medium medium) {
         return entries.stream()
                 .filter(entry -> entry.getItem().getMediumType() == medium)
@@ -73,6 +75,8 @@ public class ListsController {
         return "my_nerd_space/lists";
     }
 
+
+    // All lists GET
     @GetMapping("/watchlist")
     public String watchlist(@RequestParam(required = false) String search, Model model, HttpSession session) {
         return loadLibraryPage(
@@ -113,6 +117,8 @@ public class ListsController {
                 session);
     }
 
+
+    // ADD top library
     @PostMapping("/library/add")
     public String addToLibrary(@RequestParam UUID itemId,
                                @RequestParam EntryStatus entryStatus,
@@ -133,6 +139,7 @@ public class ListsController {
         return "redirect:" + redirectTo;
     }
 
+    // REMOVE from library
     @PostMapping("/library/remove")
     public String removeFromLibrary(@RequestParam UUID entryId,
                                     @RequestParam String redirectTo,

@@ -5,7 +5,7 @@ import app.model.entity.item.Medium;
 import app.service.item.ItemService;
 
 // THIS IS A TEST FILE
-// In NerdyLogsAppApplication you can find a commented run command that will add these to data base to allow easier testing with more units
+// In NerdyLogsAppApplication you can find a commented run command that will add these to database to allow easier testing with more units
 // Items can still be added from the admin account, but if you want to test with more items, I thought this would make it easier
 
 public class TestData {

@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -39,8 +36,5 @@ public class Item {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Genre genre;
-
-    //TODO: Map the table properly/set up relationships
-    // private List<String> tags = new ArrayList<>();
 
 }

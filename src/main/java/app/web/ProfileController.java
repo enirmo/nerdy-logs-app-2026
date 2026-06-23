@@ -31,11 +31,7 @@ public class ProfileController {
         this.adminLogService = adminLogService;
     }
 
-    private void loadAdminPageData(Model model) {
-        model.addAttribute("items", itemService.getAllItems());
-        model.addAttribute("users", userService.getAllUsers());
-    }
-
+    // Check if user is admin
     private boolean isAdmin(HttpSession session) {
         UUID userId = (UUID) session.getAttribute("user_id");
 
@@ -48,6 +44,9 @@ public class ProfileController {
         return user.getRole() == Role.ADMIN;
     }
 
+    // USER side
+
+    // Show user profile
     @GetMapping("/profile")
     public String getUserPage(HttpSession session, Model model) {
         UUID userId = (UUID) session.getAttribute("user_id");
@@ -63,6 +62,8 @@ public class ProfileController {
         return "profile/user";
     }
 
+
+    // Edit user profile
     @PostMapping("/profile/edit")
     public String editProfile(@RequestParam String profilePicture,
                               @RequestParam String bio,
@@ -78,6 +79,8 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
+
+    // Delete user profile - user side
     @PostMapping("/profile/delete")
     public String deleteOwnProfile(HttpSession session) {
         UUID userId = (UUID) session.getAttribute("user_id");
@@ -92,8 +95,11 @@ public class ProfileController {
         return "redirect:/";
     }
 
-    // ADMIN
 
+
+    // ADMIN side
+
+    // Get admin panel
     @GetMapping("/admin")
     public String getAdminPage(@RequestParam(required = false) String itemSearch,
                                @RequestParam(required = false) String userSearch,
@@ -115,6 +121,7 @@ public class ProfileController {
         return "profile/admin";
     }
 
+    // Get all items on admin panel
     @GetMapping("/admin/items/all")
     public String getAllAdminItems(Model model, HttpSession session) {
         if (!isAdmin(session)) {
@@ -128,6 +135,7 @@ public class ProfileController {
         return "profile/admin";
     }
 
+    // Get admin action history
     @GetMapping("/admin/changelog")
     public String getHistoryPage(@RequestParam(required = false) String search, Model model, HttpSession session) {
 
@@ -141,6 +149,7 @@ public class ProfileController {
         return "profile/admin-changelog";
     }
 
+    // Show add item panel with all info to fill out
     @GetMapping("/admin/items/add")
     public String getAddItemPage(Model model, HttpSession session) {
         if (!isAdmin(session)) {
@@ -157,6 +166,8 @@ public class ProfileController {
         return "profile/admin";
     }
 
+
+    // Add an item with the info
     @PostMapping("/admin/items/add")
     public String addItem(@Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
                           BindingResult bindingResult,
@@ -184,6 +195,7 @@ public class ProfileController {
         return "redirect:/admin";
     }
 
+    // Get edit item panel
     @GetMapping("/admin/catalog/{id}/edit")
     public String getEditItemPage(@PathVariable UUID id, Model model,HttpSession session) {
         if (!isAdmin(session)) {
@@ -213,6 +225,7 @@ public class ProfileController {
         return "profile/admin";
     }
 
+    // Edit items
     @PostMapping("/admin/catalog/{id}/edit")
     public String editItem(@PathVariable UUID id,
                            @ModelAttribute ItemRequest itemRequest,HttpSession session) {
@@ -226,6 +239,7 @@ public class ProfileController {
         return "redirect:/admin";
     }
 
+    // Delete items - admin side
     @PostMapping("/admin/items/{id}/delete")
     public String deleteItem(@PathVariable UUID id, HttpSession session) {
         if (!isAdmin(session)) {
@@ -236,6 +250,7 @@ public class ProfileController {
         return "redirect:/admin";
     }
 
+    // Delete user - admin side
     @PostMapping("/admin/users/{id}/delete")
     public String deleteUser(@PathVariable UUID id, HttpSession session) {
         if (!isAdmin(session)) {
