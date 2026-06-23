@@ -198,10 +198,6 @@
 
                 </div>
 
-                <a th:href="@{/admin/users/{id}(id=${user.id})}" class="small-btn view">
-                    View Profile
-                </a>
-
                 <div th:if="${#lists.isEmpty(users)}" class="empty-state">
                     No users found.
                 </div>

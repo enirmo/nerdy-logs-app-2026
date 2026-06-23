@@ -4,6 +4,7 @@ import app.model.entity.item.Item;
 import app.model.entity.libraryentry.EntryStatus;
 import app.model.entity.libraryentry.LibraryEntry;
 import app.model.entity.user.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +24,8 @@ public interface LibraryRepository extends JpaRepository<LibraryEntry, UUID> {
             EntryStatus entryStatus,
             String itemName
     );
+
+    @Transactional
+    void deleteAllByUser(User user);
 
 }
