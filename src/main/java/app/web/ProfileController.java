@@ -1,13 +1,16 @@
 package app.web;
 
 import app.model.entity.item.Item;
+import app.model.entity.user.Role;
 import app.model.entity.user.User;
 import app.service.adminlog.AdminLogService;
 import app.service.item.ItemService;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Genre;
@@ -31,6 +34,18 @@ public class ProfileController {
     private void loadAdminPageData(Model model) {
         model.addAttribute("items", itemService.getAllItems());
         model.addAttribute("users", userService.getAllUsers());
+    }
+
+    private boolean isAdmin(HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return false;
+        }
+
+        User user = userService.getById(userId);
+
+        return user.getRole() == Role.ADMIN;
     }
 
     @GetMapping("/profile")
@@ -82,7 +97,12 @@ public class ProfileController {
     @GetMapping("/admin")
     public String getAdminPage(@RequestParam(required = false) String itemSearch,
                                @RequestParam(required = false) String userSearch,
-                               Model model) {
+                               Model model,
+                               HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
 
         model.addAttribute("items", itemService.searchItems(itemSearch));
         model.addAttribute("users", userService.searchUsers(userSearch));
@@ -96,7 +116,11 @@ public class ProfileController {
     }
 
     @GetMapping("/admin/items/all")
-    public String getAllAdminItems(Model model) {
+    public String getAllAdminItems(Model model, HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("items", itemService.getAllItems());
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("showAllItems", true);
@@ -105,8 +129,12 @@ public class ProfileController {
     }
 
     @GetMapping("/admin/changelog")
-    public String getHistoryPage(@RequestParam(required = false) String search,
-                                 Model model) {
+    public String getHistoryPage(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("logs", adminLogService.searchLogs(search));
         model.addAttribute("search", search);
 
@@ -114,7 +142,11 @@ public class ProfileController {
     }
 
     @GetMapping("/admin/items/add")
-    public String getAddItemPage(Model model) {
+    public String getAddItemPage(Model model, HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("showAddForm", true);
         model.addAttribute("itemRequest", ItemRequest.builder().build());
         model.addAttribute("mediums", Medium.values());
@@ -126,7 +158,26 @@ public class ProfileController {
     }
 
     @PostMapping("/admin/items/add")
-    public String addItem(@ModelAttribute ItemRequest itemRequest) {
+    public String addItem(@Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
+                          BindingResult bindingResult,
+                          Model model,
+                          HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("showAddForm", true);
+            model.addAttribute("mediums", Medium.values());
+            model.addAttribute("genres", Genre.values());
+            model.addAttribute("items", itemService.searchItems(null));
+            model.addAttribute("users", userService.getAllUsers());
+            model.addAttribute("itemSearch", null);
+            model.addAttribute("userSearch", null);
+
+            return "profile/admin";
+        }
+
         itemService.createItem(itemRequest);
         adminLogService.logAction("Added item \"" + itemRequest.getItemName() + "\"");
 
@@ -134,7 +185,11 @@ public class ProfileController {
     }
 
     @GetMapping("/admin/catalog/{id}/edit")
-    public String getEditItemPage(@PathVariable UUID id, Model model) {
+    public String getEditItemPage(@PathVariable UUID id, Model model,HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         Item item = itemService.getItem(id);
 
         ItemRequest itemRequest = ItemRequest.builder()
@@ -160,7 +215,10 @@ public class ProfileController {
 
     @PostMapping("/admin/catalog/{id}/edit")
     public String editItem(@PathVariable UUID id,
-                           @ModelAttribute ItemRequest itemRequest) {
+                           @ModelAttribute ItemRequest itemRequest,HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
 
         itemService.updateItem(id, itemRequest);
         adminLogService.logAction("Updated item \"" + itemRequest.getItemName() + "\"");
@@ -169,13 +227,21 @@ public class ProfileController {
     }
 
     @PostMapping("/admin/items/{id}/delete")
-    public String deleteItem(@PathVariable UUID id) {
+    public String deleteItem(@PathVariable UUID id, HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         itemService.deleteItem(id);
         return "redirect:/admin";
     }
 
     @PostMapping("/admin/users/{id}/delete")
-    public String deleteUser(@PathVariable UUID id) {
+    public String deleteUser(@PathVariable UUID id, HttpSession session) {
+        if (!isAdmin(session)) {
+            return "redirect:/sign-in";
+        }
+
         userService.deleteUser(id);
         return "redirect:/admin";
     }

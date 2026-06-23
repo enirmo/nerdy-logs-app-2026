@@ -289,3 +289,10 @@
     color: var(--text-main);
     border: 1px solid rgba(255,255,255,0.18);
 }
+
+.field-error {
+    margin-top: 6px;
+    color: #ff9aa8;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
