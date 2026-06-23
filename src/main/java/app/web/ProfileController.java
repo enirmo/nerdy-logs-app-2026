@@ -48,6 +48,37 @@ public class ProfileController {
         return "profile/user";
     }
 
+    @PostMapping("/profile/edit")
+    public String editProfile(@RequestParam String profilePicture,
+                              @RequestParam String bio,
+                              HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        userService.updateProfile(userId, profilePicture, bio);
+
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/delete")
+    public String deleteOwnProfile(HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        userService.deleteUser(userId);
+        session.invalidate();
+
+        return "redirect:/";
+    }
+
+    // ADMIN
+
     @GetMapping("/admin")
     public String getAdminPage(@RequestParam(required = false) String itemSearch,
                                @RequestParam(required = false) String userSearch,

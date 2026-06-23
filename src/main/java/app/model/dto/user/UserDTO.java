@@ -16,4 +16,5 @@ public class UserDTO {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private List<LibraryEntry> libraryEntries;
+    private String bio;
 }

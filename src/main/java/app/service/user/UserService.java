@@ -112,4 +112,15 @@ public class UserService {
 
         return userRepository.findByUsernameContainingIgnoreCase(search);
     }
+
+    public void updateProfile(UUID userId, String profilePicture, String bio) {
+        User user = getById(userId);
+
+        user.setProfilePicture(profilePicture);
+        user.setBio(bio);
+        user.setUpdatedOn(LocalDateTime.now());
+
+        userRepository.save(user);
+
+    }
 }

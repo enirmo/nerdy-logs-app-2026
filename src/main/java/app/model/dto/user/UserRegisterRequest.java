@@ -33,4 +33,6 @@ public class UserRegisterRequest {
     private String email;
 
     private String profilePicture;
+
+    private String bio;
 }
