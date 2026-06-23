@@ -96,7 +96,15 @@
         </section>
 
         <div class="admin-tools">
-            <input type="text" placeholder="Search catalog..." class="admin-input">
+            <form method="get" th:action="@{/admin}" class="admin-tools">
+                <input type="text"
+                       name="itemSearch"
+                       placeholder="Search catalog..."
+                       class="admin-input"
+                       th:value="${itemSearch}">
+
+                <a href="/admin/items/all" class="admin-btn">See More</a>
+            </form>
 
             <select class="admin-select">
                 <option>All Categories</option>
@@ -129,8 +137,13 @@
                 <span class="actions">
                     <a th:href="@{/admin/catalog/{id}/edit(id=${item.id})}" class="small-btn edit">Edit</a>
 
-                    <form th:action="@{/admin/catalog/{id}/delete(id=${item.id})}" method="post">
-                        <button type="submit" class="small-btn danger">Remove</button>
+                    <form th:action="@{/admin/items/{id}/delete(id=${item.id})}"
+                          method="post"
+                          style="display:inline;">
+
+                        <button type="submit" class="small-btn danger">
+                            Delete
+                         </button>
                     </form>
                 </span>
 
@@ -148,8 +161,13 @@
         </div>
 
         <div class="admin-tools">
-            <input type="text" placeholder="Search users by username or email..." class="admin-input wide">
-            <button class="admin-btn">Search</button>
+            <form method="get" th:action="@{/admin}" class="search-form">
+                <input type="text"
+                       name="userSearch"
+                       placeholder="Search users..."
+                       class="admin-input"
+                       th:value="${userSearch}">
+            </form>
         </div>
 
         <div class="user-results">
@@ -162,6 +180,7 @@
                 <div>
                     <h3 th:text="${user.username}">Username</h3>
                     <p th:text="'@' + ${user.username}">@username</p>
+
                 </div>
 
                 <a th:href="@{/admin/users/{id}(id=${user.id})}" class="small-btn view">
@@ -171,13 +190,19 @@
                 <div th:if="${#lists.isEmpty(users)}" class="empty-state">
                     No users found.
                 </div>
+
+                <form th:action="@{/admin/users/{id}/delete(id=${user.id})}"
+                      method="post"
+                      style="display:inline;">
+
+                    <button type="submit" class="small-btn danger">
+                        Delete
+                    </button>
+                </form>
             </article>
         </div>
     </section>
 
-
-
-    </form>
 
 </main>
 

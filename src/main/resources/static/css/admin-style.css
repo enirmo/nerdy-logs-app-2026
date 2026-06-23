@@ -55,6 +55,22 @@
     outline: none;
 }
 
+.admin-select {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 14px;
+    padding: 0 18px;
+    height: 52px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.admin-select option {
+    background: #2b183f;
+    color: #ffffff;
+}
+
 .admin-input {
     width: 320px;
 }

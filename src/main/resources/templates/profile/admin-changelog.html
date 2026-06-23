@@ -30,10 +30,13 @@
     <section class="history-section">
 
         <div class="history-tools">
-            <input
-                    type="text"
-                    class="history-search"
-                    placeholder="Search actions...">
+            <form method="get" th:action="@{/admin/changelog}" class="history-tools">
+                <input type="text"
+                       name="search"
+                       class="history-search"
+                       placeholder="Search actions..."
+                       th:value="${search}">
+            </form>
         </div>
 
         <div class="history-table">

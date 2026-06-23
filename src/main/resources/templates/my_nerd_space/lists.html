@@ -68,7 +68,13 @@
 <main class="library-content">
 
     <section class="library-tools">
-        <input type="text" placeholder="Search your library..." class="search-input">
+        <form method="get" th:action="@{${currentPath}}" class="search-form">
+            <input type="text"
+                   name="search"
+                   placeholder="Search your list..."
+                   class="search-input"
+                   th:value="${search}">
+        </form>
 
         <select class="filter-select">
             <option value="">All categories</option>
@@ -108,6 +114,15 @@
                         ·
                         <span th:text="${entry.item.genre}">Fantasy</span>
                     </p>
+
+                    <form th:action="@{/library/remove}" method="post">
+                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>
@@ -128,6 +143,15 @@
                         ·
                         <span th:text="${entry.item.genre}">Drama</span>
                     </p>
+
+                    <form th:action="@{/library/remove}" method="post">
+                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>
@@ -148,6 +172,15 @@
                         ·
                         <span th:text="${entry.item.genre}">RPG</span>
                     </p>
+
+                    <form th:action="@{/library/remove}" method="post">
+                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>
@@ -168,6 +201,15 @@
                         ·
                         <span th:text="${entry.item.genre}">Action</span>
                     </p>
+
+                    <form th:action="@{/library/remove}" method="post">
+                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>
@@ -188,6 +230,15 @@
                         ·
                         <span th:text="${entry.item.genre}">Fantasy</span>
                     </p>
+
+                    <form th:action="@{/library/remove}" method="post">
+                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>

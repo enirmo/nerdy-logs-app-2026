@@ -132,4 +132,35 @@ public class LibraryService {
 
         return entriesByStatus;
     }
+
+    public List<LibraryEntry> searchUserLibraryByStatus(UUID userId,
+                                                        EntryStatus status,
+                                                        String search) {
+        User user = getUserOrThrow(userId);
+
+        if (search == null || search.isBlank()) {
+            return libraryRepository.findByUserAndEntryStatus(user, status);
+        }
+
+        return libraryRepository.findByUserAndEntryStatusAndItem_NameContainingIgnoreCase(
+                user,
+                status,
+                search
+        );
+    }
+
+    public List<LibraryEntry> searchEntriesByStatus(UUID userId, EntryStatus status, String search) {
+        if (search == null || search.isBlank()) {
+            return getEntriesByStatus(userId, status);
+        }
+
+        User user = getUserOrThrow(userId);
+
+        return libraryRepository
+                .findByUserAndEntryStatusAndItem_NameContainingIgnoreCase(
+                        user,
+                        status,
+                        search
+                );
+    }
 }

@@ -78,12 +78,6 @@ public class ItemService {
         return items;
     }
 
-
-    public List<Item> searchItems(String keyword) {
-        return List.of();
-    }
-
-
     public void updateItem(UUID itemId, ItemRequest request) {
         Item item = getItemOrThrow(itemId);
 
@@ -115,5 +109,13 @@ public class ItemService {
                 medium,
                 searchTerm
         );
+    }
+
+    public List<Item> searchItems(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return itemRepository.findTop3ByOrderByIdDesc();
+        }
+
+        return itemRepository.findByNameContainingIgnoreCase(keyword);
     }
 }

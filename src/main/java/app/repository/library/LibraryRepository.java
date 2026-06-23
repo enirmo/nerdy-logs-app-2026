@@ -18,4 +18,12 @@ public interface LibraryRepository extends JpaRepository<LibraryEntry, UUID> {
     Optional<LibraryEntry> findByUserAndItem(User user, Item item);
 
     List<LibraryEntry> findByUserIdAndEntryStatus(UUID userId, EntryStatus entryStatus);
+
+    List<LibraryEntry> findByUserAndEntryStatusAndItem_NameContainingIgnoreCase(
+            User user,
+            EntryStatus entryStatus,
+            String itemName
+    );
+
+    List<LibraryEntry> findByUserAndEntryStatus(User user, EntryStatus status);
 }

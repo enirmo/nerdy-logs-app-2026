@@ -35,7 +35,7 @@ public class ListsController {
     private String loadLibraryPage(
             EntryStatus status,
             String activePage,
-            Model model,
+            String search, Model model,
             HttpSession session) {
 
         UUID userId = (UUID) session.getAttribute("user_id");
@@ -47,7 +47,7 @@ public class ListsController {
         User user = userService.getById(userId);
 
         List<LibraryEntry> entries =
-                libraryService.getEntriesByStatus(userId, status);
+                libraryService.searchEntriesByStatus(userId, status, search);
 
         model.addAttribute("user", user);
         model.addAttribute("activePage", activePage);
@@ -67,42 +67,49 @@ public class ListsController {
         model.addAttribute("books",
                 filterByMedium(entries, Medium.BOOK));
 
+        model.addAttribute("currentPath", "/" + activePage);
+        model.addAttribute("search", search);
+
         return "my_nerd_space/lists";
     }
 
     @GetMapping("/watchlist")
-    public String watchlist(Model model, HttpSession session) {
+    public String watchlist(@RequestParam(required = false) String search, Model model, HttpSession session) {
         return loadLibraryPage(
                 EntryStatus.PLANNED,
                 "watchlist",
+                search,
                 model,
-                session);
+                session
+        );
     }
 
     @GetMapping("/completed")
-    public String completed(Model model, HttpSession session) {
+    public String completed(@RequestParam(required = false) String search, Model model, HttpSession session) {
         return loadLibraryPage(
                 EntryStatus.COMPLETED,
                 "completed",
+                search,
                 model,
                 session);
     }
 
     @GetMapping("/in-progress")
-    public String inProgress(Model model, HttpSession session) {
+    public String inProgress(@RequestParam(required = false) String search, Model model, HttpSession session) {
         return loadLibraryPage(
                 EntryStatus.STARTED,
                 "in-progress",
+                search,
                 model,
                 session);
     }
 
     @GetMapping("/dropped")
-    public String dropped(Model model, HttpSession session) {
+    public String dropped(@RequestParam(required = false) String search, Model model, HttpSession session) {
         return loadLibraryPage(
                 EntryStatus.DROPPED,
                 "dropped",
-                model,
+                search, model,
                 session);
     }
 
@@ -122,6 +129,21 @@ public class ListsController {
         }
 
         libraryService.addItemToLibrary(userId, itemId, entryStatus);
+
+        return "redirect:" + redirectTo;
+    }
+
+    @PostMapping("/library/remove")
+    public String removeFromLibrary(@RequestParam UUID entryId,
+                                    @RequestParam String redirectTo,
+                                    HttpSession session) {
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        libraryService.removeFromLibrary(entryId);
 
         return "redirect:" + redirectTo;
     }

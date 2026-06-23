@@ -104,4 +104,12 @@ public class UserService {
 
         adminLogService.logAction(String.format("Deleted user %s", user.getUsername()));
     }
+
+    public List<User> searchUsers(String search) {
+        if (search == null || search.isBlank()) {
+            return getAllUsers();
+        }
+
+        return userRepository.findByUsernameContainingIgnoreCase(search);
+    }
 }

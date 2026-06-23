@@ -1,5 +1,6 @@
 package app.web;
 
+import app.model.entity.item.Item;
 import app.model.entity.user.User;
 import app.service.adminlog.AdminLogService;
 import app.service.item.ItemService;
@@ -7,12 +8,10 @@ import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Genre;
 import app.model.entity.item.Medium;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.UUID;
 
@@ -50,17 +49,35 @@ public class ProfileController {
     }
 
     @GetMapping("/admin")
-    public String getAdminPage(Model model) {
-        model.addAttribute("catalogItems", itemService.getAllItems());
+    public String getAdminPage(@RequestParam(required = false) String itemSearch,
+                               @RequestParam(required = false) String userSearch,
+                               Model model) {
+
+        model.addAttribute("items", itemService.searchItems(itemSearch));
+        model.addAttribute("users", userService.searchUsers(userSearch));
+
+        model.addAttribute("itemSearch", itemSearch);
+        model.addAttribute("userSearch", userSearch);
+
+        model.addAttribute("showAllItems", false);
+
+        return "profile/admin";
+    }
+
+    @GetMapping("/admin/items/all")
+    public String getAllAdminItems(Model model) {
+        model.addAttribute("items", itemService.getAllItems());
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("showAllItems", true);
 
         return "profile/admin";
     }
 
     @GetMapping("/admin/changelog")
-    public String getHistoryPage(Model model) {
-
-        //model.addAttribute("logs", adminLogService.getAllLogs());
+    public String getHistoryPage(@RequestParam(required = false) String search,
+                                 Model model) {
+        model.addAttribute("logs", adminLogService.searchLogs(search));
+        model.addAttribute("search", search);
 
         return "profile/admin-changelog";
     }
@@ -82,6 +99,53 @@ public class ProfileController {
         itemService.createItem(itemRequest);
         adminLogService.logAction("Added item \"" + itemRequest.getItemName() + "\"");
 
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/admin/catalog/{id}/edit")
+    public String getEditItemPage(@PathVariable UUID id, Model model) {
+        Item item = itemService.getItem(id);
+
+        ItemRequest itemRequest = ItemRequest.builder()
+                .itemName(item.getName())
+                .medium(item.getMediumType())
+                .genre(item.getGenre())
+                .description(item.getDescription())
+                .pictureCover(item.getPictureCover())
+                .releaseYear(item.getReleaseYear())
+                .build();
+
+        model.addAttribute("showAddForm", true);
+        model.addAttribute("editMode", true);
+        model.addAttribute("itemId", id);
+        model.addAttribute("itemRequest", itemRequest);
+        model.addAttribute("mediums", Medium.values());
+        model.addAttribute("genres", Genre.values());
+        model.addAttribute("items", itemService.getAllItems());
+        model.addAttribute("users", userService.getAllUsers());
+
+        return "profile/admin";
+    }
+
+    @PostMapping("/admin/catalog/{id}/edit")
+    public String editItem(@PathVariable UUID id,
+                           @ModelAttribute ItemRequest itemRequest) {
+
+        itemService.updateItem(id, itemRequest);
+        adminLogService.logAction("Updated item \"" + itemRequest.getItemName() + "\"");
+
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/items/{id}/delete")
+    public String deleteItem(@PathVariable UUID id) {
+        itemService.deleteItem(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/users/{id}/delete")
+    public String deleteUser(@PathVariable UUID id) {
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 }
