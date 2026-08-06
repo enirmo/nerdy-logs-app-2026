@@ -3,11 +3,14 @@ package app.service;
 import app.model.dto.ReviewCreateRequest;
 import app.model.entity.Review;
 import app.repository.ReviewRepository;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
-/*
+
 @Service
 public class ReviewService {
 
@@ -19,15 +22,13 @@ public class ReviewService {
 
     // 1. Add review (only to existing library items, ONLY if no review already)
     public void addReview(ReviewCreateRequest request) {
-        Review review = reviewRepository.findByUserIdAndMediaId(request.getUserId(), request.getMediaId());
-
-        if (review != null) {
+        if (reviewRepository.existsByUserIdAndMediaId(request.getUserId(), request.getMediaId())) {
             throw new IllegalArgumentException("Review already exists");
         }
 
         LocalDateTime now = LocalDateTime.now();
 
-        review = Review.builder()
+        Review review = Review.builder()
                 .userId(request.getUserId())
                 .mediaId(request.getMediaId())
                 .rating(request.getRating())
@@ -39,12 +40,10 @@ public class ReviewService {
     }
 
     // 2. Edit review (only if exists)
-    public void EditReview(ReviewCreateRequest request) {
-        Review review = reviewRepository.findByUserIdAndMediaId(request.getUserId(), request.getMediaId());
-
-        if (review == null) {
-            throw new IllegalArgumentException("Review doesn't exist");
-        }
+    public void editReview(ReviewCreateRequest request) {
+        Review review = reviewRepository
+                .findByUserIdAndMediaId(request.getUserId(), request.getMediaId())
+                .orElseThrow(() -> new IllegalArgumentException("Review doesn't exist"));
 
         review.setRating(request.getRating());
         review.setComment(request.getComment());
@@ -54,10 +53,11 @@ public class ReviewService {
     }
 
     // 3. Delete review (only if exists)
-    public void deleteReview(Review review) {
-        Review reviewToDelete = reviewRepository.findById(review.getId()).orElseThrow(() -> new IllegalArgumentException("Review not found"));
+    public void deleteReview(UUID reviewId) {
+        Review reviewToDelete = reviewRepository
+                .findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
 
         reviewRepository.delete(reviewToDelete);
     }
 }
-*/
