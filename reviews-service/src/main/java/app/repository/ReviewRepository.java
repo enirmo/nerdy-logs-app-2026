@@ -4,6 +4,7 @@ import app.model.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ import java.util.UUID;
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
     Optional<Review> findByUserIdAndMediaId(UUID userId, UUID mediaId);
     boolean existsByUserIdAndMediaId(UUID userId, UUID mediaId);
+    List<Review> findAllByMediaId(UUID mediaID);
 }

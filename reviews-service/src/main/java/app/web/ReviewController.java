@@ -1,6 +1,8 @@
 package app.web;
 
 import app.model.dto.ReviewCreateRequest;
+import app.model.dto.ReviewResponse;
+import app.model.entity.Review;
 import app.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ public class ReviewController {
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
+
 
     @PostMapping
     public ResponseEntity<Void> addReview(
@@ -37,6 +40,7 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(
             @PathVariable UUID reviewId) {
@@ -44,5 +48,25 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/user/{userId}/media/{mediaId}")
+    public ResponseEntity<ReviewResponse> getReview(
+            @PathVariable UUID userId,
+            @PathVariable UUID mediaId) {
+
+        ReviewResponse review = reviewService.getReview(userId, mediaId);
+
+        return ResponseEntity.ok(review);
+    }
+
+    @GetMapping("/media/{mediaId}/average")
+    public ResponseEntity<Double> getAverageReviews(
+            @PathVariable UUID mediaId) {
+
+        double average = reviewService.getAverageReviews(mediaId);
+
+        return ResponseEntity.ok(average);
     }
 }
