@@ -2,7 +2,6 @@ package app.web;
 
 import app.model.dto.ReviewCreateRequest;
 import app.model.dto.ReviewResponse;
-import app.model.entity.Review;
 import app.service.ReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -2,13 +2,14 @@ package app.web;
 
 import app.model.dto.reviews.ReviewCreateRequest;
 import app.service.reviews.ReviewIntegrationService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/test/reviews")
+import java.util.UUID;
+
+@Controller
+@RequestMapping("/reviews")
 public class ReviewController {
 
     private final ReviewIntegrationService reviewIntegrationService;
@@ -17,8 +18,29 @@ public class ReviewController {
         this.reviewIntegrationService = reviewIntegrationService;
     }
 
-    @PostMapping
-    public void addReview(@RequestBody ReviewCreateRequest request) {
+    @PostMapping("/add")
+    public String addReview(
+            @RequestParam UUID mediaId,
+            @RequestParam int rating,
+            @RequestParam(required = false) String comment,
+            @RequestParam String redirectTo,
+            HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        ReviewCreateRequest request = ReviewCreateRequest.builder()
+                .userId(userId)
+                .mediaId(mediaId)
+                .rating(rating)
+                .comment(comment)
+                .build();
+
         reviewIntegrationService.addReview(request);
+
+        return "redirect:" + redirectTo;
     }
 }

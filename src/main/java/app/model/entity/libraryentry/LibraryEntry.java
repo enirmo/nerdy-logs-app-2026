@@ -31,10 +31,6 @@ public class LibraryEntry {
     @Enumerated(EnumType.STRING)
     private EntryStatus entryStatus;
 
-    private Integer rating;
-
-    private String reviewNotes;
-
     private LocalDateTime addedOn;
     private LocalDateTime completedOn;
 }

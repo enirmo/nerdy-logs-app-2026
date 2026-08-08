@@ -4,12 +4,10 @@ import app.model.dto.ReviewCreateRequest;
 import app.model.dto.ReviewResponse;
 import app.model.entity.Review;
 import app.repository.ReviewRepository;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 

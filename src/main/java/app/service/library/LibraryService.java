@@ -57,7 +57,6 @@ public class LibraryService {
 
         entry.setUser(user);
         entry.setItem(item);
-        entry.setRating(0);
         entry.setEntryStatus(status);
 
         libraryRepository.save(entry);

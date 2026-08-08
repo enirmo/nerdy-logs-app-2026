@@ -117,18 +117,38 @@
 
                     <p>
                         <span th:text="${entry.item.releaseYear}">2024</span>
-                        ·
                         <span th:text="${entry.item.genre}">Fantasy</span>
                     </p>
 
-                    <form th:action="@{/library/remove}" method="post">
-                        <input type="hidden" name="entryId" th:value="${entry.id}">
+                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+
+                        <input type="hidden" name="mediaId" th:value="${entry.item.id}">
                         <input type="hidden" name="redirectTo" th:value="${currentPath}">
 
-                        <button type="submit" class="remove-btn">
-                            Remove
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
                         </button>
+
                     </form>
+
                 </div>
             </article>
         </div>
@@ -146,19 +166,48 @@
 
                     <p>
                         <span th:text="${entry.item.releaseYear}">2024</span>
-                        ·
                         <span th:text="${entry.item.genre}">Drama</span>
                     </p>
 
-                    <form th:action="@{/library/remove}" method="post">
-                        <input type="hidden" name="entryId" th:value="${entry.id}">
-                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
 
-                        <button type="submit" class="remove-btn">
-                            Remove
+                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+
+                        <input type="hidden"
+                               name="mediaId"
+                               th:value="${entry.item.id}">
+
+                        <input type="hidden"
+                               name="redirectTo"
+                               th:value="${currentPath}">
+
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
                         </button>
+
                     </form>
+                    
                 </div>
+
+
             </article>
         </div>
     </section>
@@ -175,19 +224,46 @@
 
                     <p>
                         <span th:text="${entry.item.releaseYear}">2024</span>
-                        ·
                         <span th:text="${entry.item.genre}">RPG</span>
                     </p>
 
-                    <form th:action="@{/library/remove}" method="post">
-                        <input type="hidden" name="entryId" th:value="${entry.id}">
-                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+                    <form th:action="@{/reviews/add}" method="post" class="review-form">
 
-                        <button type="submit" class="remove-btn">
-                            Remove
+                        <input type="hidden"
+                               name="mediaId"
+                               th:value="${entry.item.id}">
+
+                        <input type="hidden"
+                               name="redirectTo"
+                               th:value="${currentPath}">
+
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
                         </button>
+
                     </form>
+
                 </div>
+
             </article>
         </div>
     </section>
@@ -204,19 +280,46 @@
 
                     <p>
                         <span th:text="${entry.item.releaseYear}">2024</span>
-                        ·
                         <span th:text="${entry.item.genre}">Action</span>
                     </p>
 
-                    <form th:action="@{/library/remove}" method="post">
-                        <input type="hidden" name="entryId" th:value="${entry.id}">
-                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+                    <form th:action="@{/reviews/add}" method="post" class="review-form">
 
-                        <button type="submit" class="remove-btn">
-                            Remove
+                        <input type="hidden"
+                               name="mediaId"
+                               th:value="${entry.item.id}">
+
+                        <input type="hidden"
+                               name="redirectTo"
+                               th:value="${currentPath}">
+
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
                         </button>
+
                     </form>
+
                 </div>
+
             </article>
         </div>
     </section>
@@ -233,19 +336,46 @@
 
                     <p>
                         <span th:text="${entry.item.releaseYear}">2024</span>
-                        ·
                         <span th:text="${entry.item.genre}">Fantasy</span>
                     </p>
 
-                    <form th:action="@{/library/remove}" method="post">
-                        <input type="hidden" name="entryId" th:value="${entry.id}">
-                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+                    <form th:action="@{/reviews/add}" method="post" class="review-form">
 
-                        <button type="submit" class="remove-btn">
-                            Remove
+                        <input type="hidden"
+                               name="mediaId"
+                               th:value="${entry.item.id}">
+
+                        <input type="hidden"
+                               name="redirectTo"
+                               th:value="${currentPath}">
+
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
                         </button>
+
                     </form>
+
                 </div>
+
             </article>
         </div>
     </section>

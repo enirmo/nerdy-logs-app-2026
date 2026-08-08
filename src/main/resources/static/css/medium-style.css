@@ -93,6 +93,12 @@
     cursor: pointer;
 }
 
+.list-select option {
+    border-radius: 50px;
+    background: #2b1c49;
+    color: #ffc7dc;
+}
+
 .search-btn {
     background: #9a5cf6;
     color: white;
