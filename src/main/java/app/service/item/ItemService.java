@@ -1,6 +1,7 @@
 package app.service.item;
 
-import app.exception.ItemNotFoundException;
+import app.exceptions.ItemNotFoundException;
+import app.exceptions.ResourceAlreadyExistsException;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
@@ -36,7 +37,7 @@ public class ItemService {
     public void createItem(ItemRequest itemRequest) {
         itemRepository.findByName(itemRequest.getItemName())
                 .ifPresent(item -> {
-                    throw new IllegalArgumentException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
+                    throw new ResourceAlreadyExistsException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
                 });
 
         // Note that description, pictureCover and releaseYear are not mandatory fields, so they can be null

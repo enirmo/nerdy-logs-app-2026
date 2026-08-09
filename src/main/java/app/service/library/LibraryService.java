@@ -1,6 +1,7 @@
 package app.service.library;
 
-import app.exception.ItemNotFoundException;
+import app.exceptions.ItemNotFoundException;
+import app.exceptions.ResourceAlreadyExistsException;
 import app.model.entity.item.Item;
 import app.model.entity.libraryentry.EntryStatus;
 import app.model.entity.libraryentry.LibraryEntry;
@@ -51,7 +52,7 @@ public class LibraryService {
 
         libraryRepository.findByUserAndItem(user, item)
                 .ifPresent(i -> {
-                   throw new IllegalArgumentException(ITEM_ALREADY_EXISTS_IN_LIBRARY);
+                   throw new ResourceAlreadyExistsException(ITEM_ALREADY_EXISTS_IN_LIBRARY);
                 });
 
         LibraryEntry entry = new LibraryEntry();

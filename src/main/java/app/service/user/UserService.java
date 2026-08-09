@@ -1,5 +1,6 @@
 package app.service.user;
 import app.config.UserProperties;
+import app.exceptions.ResourceAlreadyExistsException;
 import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
 import app.model.entity.user.Role;
@@ -47,12 +48,12 @@ public class UserService {
         // 1. Check if username/email exist
          userRepository.findByUsername(userRegisterRequest.getUsername())
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException(USERNAME_TAKEN);
+                    throw new ResourceAlreadyExistsException(USERNAME_TAKEN);
                 });
 
          userRepository.findByEmail(userRegisterRequest.getEmail())
                  .ifPresent(user -> {
-                     throw new IllegalArgumentException(EMAIL_ALREADY_REGISTERED);
+                     throw new ResourceAlreadyExistsException(EMAIL_ALREADY_REGISTERED);
                  });
 
         // -- Extra: Setting current time for easy access

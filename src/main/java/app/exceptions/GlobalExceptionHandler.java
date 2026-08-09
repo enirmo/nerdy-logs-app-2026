@@ -1,4 +1,4 @@
-package app.exception;
+package app.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -16,6 +16,7 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException exception,
             Model model) {
 
+        model.addAttribute("errorCode", 400);
         model.addAttribute(
                 "errorMessage",
                 "The request contains an invalid value."
@@ -30,6 +31,22 @@ public class GlobalExceptionHandler {
             ItemNotFoundException exception,
             Model model) {
 
+        model.addAttribute("errorCode", 404);
+        model.addAttribute(
+                "errorMessage",
+                exception.getMessage()
+        );
+
+        return "error";
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleResourceAlreadyExists(
+            ResourceAlreadyExistsException exception,
+            Model model) {
+
+        model.addAttribute("errorCode", 409);
         model.addAttribute(
                 "errorMessage",
                 exception.getMessage()
@@ -39,10 +56,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleUnexpectedException(
             Exception exception,
             Model model) {
 
+        model.addAttribute("errorCode", 500);
         model.addAttribute(
                 "errorMessage",
                 exception.getMessage()

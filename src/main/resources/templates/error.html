@@ -20,8 +20,8 @@
 
     <div class="error-card">
 
-        <img th:src="@{/images/500.avif}"
-             alt="500 Internal Server Error"
+        <img th:src="@{|/images/${errorCode}.avif|}"
+             th:alt="|Error ${errorCode}|"
              class="error-image">
 
         <h1>Oops!</h1>

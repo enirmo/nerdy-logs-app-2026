@@ -1,5 +1,6 @@
 package app.web;
 
+import app.exceptions.ItemNotFoundException;
 import app.messages.ErrorMessages;
 import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.UUID;
 
 @Controller
 public class IndexController {
@@ -106,8 +110,17 @@ public class IndexController {
     }
 
 
+    /* TEST ERRORS
+
     @GetMapping("/test-error")
     public String testError() {
         throw new RuntimeException("Testing global error handler");
     }
+
+    @GetMapping("/test-bad-request/{id}")
+    public String testBadRequest(@PathVariable UUID id) {
+        return "redirect:/";
+    }
+    
+    */
 }
