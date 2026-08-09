@@ -205,7 +205,6 @@ public class ProfileController {
             return "profile/admin";
         }
 
-        itemService.createItem(itemRequest);
         adminLogService.logAction("Added item \"" + itemRequest.getItemName() + "\"");
 
         return "redirect:/admin";
@@ -243,16 +242,36 @@ public class ProfileController {
 
     // Edit items
     @PostMapping("/admin/catalog/{id}/edit")
-    public String editItem(@PathVariable UUID id,
-                           @Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
-                           BindingResult bindingResult,
-                           HttpSession session) {
+    public String editItem(
+            @PathVariable UUID id,
+            @Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
+            BindingResult bindingResult,
+            Model model,
+            HttpSession session) {
+
         if (!isAdmin(session)) {
             return "redirect:/sign-in";
         }
 
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("showAddForm", true);
+            model.addAttribute("editMode", true);
+            model.addAttribute("itemId", id);
+
+            model.addAttribute("mediums", Medium.values());
+            model.addAttribute("genres", Genre.values());
+            model.addAttribute("items", itemService.getAllItems());
+            model.addAttribute("users", userService.getAllUsers());
+
+            return "profile/admin";
+        }
+
         itemService.updateItem(id, itemRequest);
-        adminLogService.logAction("Updated item \"" + itemRequest.getItemName() + "\"");
+
+        adminLogService.logAction(
+                "Updated item \"" + itemRequest.getItemName() + "\""
+        );
 
         return "redirect:/admin";
     }

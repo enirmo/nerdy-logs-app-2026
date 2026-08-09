@@ -37,7 +37,7 @@ public class ItemService {
     public void createItem(ItemRequest itemRequest) {
         itemRepository.findByName(itemRequest.getItemName())
                 .ifPresent(item -> {
-                    throw new ResourceAlreadyExistsException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
+                    throw new IllegalArgumentException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
                 });
 
         // Note that description, pictureCover and releaseYear are not mandatory fields, so they can be null

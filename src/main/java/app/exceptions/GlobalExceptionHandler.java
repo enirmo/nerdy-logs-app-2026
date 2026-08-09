@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorCode", 500);
         model.addAttribute(
                 "errorMessage",
-                exception.getMessage()
+                "Something went wrong. Please try again."
         );
 
         return "error";

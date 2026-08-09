@@ -124,6 +124,11 @@
     background: rgba(255,255,255,0.06);
 }
 
+select option {
+    background-color: #3b2d4d;
+    color: white;
+}
+
 .table-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1.4fr;
