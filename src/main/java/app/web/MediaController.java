@@ -31,8 +31,14 @@ public class MediaController {
             return false;
         }
 
-        model.addAttribute("user", userService.getById(userId));
-        return true;
+        try {
+            model.addAttribute("user", userService.getById(userId));
+            return true;
+
+        } catch (IllegalArgumentException exception) {
+            session.invalidate();
+            return false;
+        }
     }
 
     // ADD ITEM for each category

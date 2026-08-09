@@ -1,5 +1,6 @@
 package app.service.item;
 
+import app.exception.ItemNotFoundException;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
@@ -25,7 +26,7 @@ public class ItemService {
 
     // Helper to check if item exists
     private Item getItemOrThrow(UUID itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException(ITEM_NOT_FOUND));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(ITEM_NOT_FOUND));
 
         return item;
     }

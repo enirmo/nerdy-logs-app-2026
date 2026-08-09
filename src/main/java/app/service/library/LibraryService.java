@@ -1,5 +1,6 @@
 package app.service.library;
 
+import app.exception.ItemNotFoundException;
 import app.model.entity.item.Item;
 import app.model.entity.libraryentry.EntryStatus;
 import app.model.entity.libraryentry.LibraryEntry;
@@ -33,7 +34,7 @@ public class LibraryService {
         return user;
     }
     private Item getItemOrThrow(UUID itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException(ITEM_NOT_FOUND));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(ITEM_NOT_FOUND));
 
         return item;
     }
