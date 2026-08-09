@@ -48,12 +48,12 @@ public class UserService {
         // 1. Check if username/email exist
          userRepository.findByUsername(userRegisterRequest.getUsername())
                 .ifPresent(user -> {
-                    throw new ResourceAlreadyExistsException(USERNAME_TAKEN);
+                    throw new IllegalArgumentException(USERNAME_TAKEN);
                 });
 
          userRepository.findByEmail(userRegisterRequest.getEmail())
                  .ifPresent(user -> {
-                     throw new ResourceAlreadyExistsException(EMAIL_ALREADY_REGISTERED);
+                     throw new IllegalArgumentException(EMAIL_ALREADY_REGISTERED);
                  });
 
         // -- Extra: Setting current time for easy access
