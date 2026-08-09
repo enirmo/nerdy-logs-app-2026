@@ -112,65 +112,133 @@
             <article class="entry-card" th:each="entry : ${movies}">
                 <img th:src="${entry.item.pictureCover}" alt="Movie poster">
 
-                <div class="entry-info">
-                    <h3 th:text="${entry.item.name}">Movie Title</h3>
+                <div class="entry-info"
+                     th:with="
+                        review=${reviewsByMedia[entry.item.id]},
+                        average=${averagesByMedia[entry.item.id]}">
+
+                    <h3 th:text="${entry.item.name}"></h3>
 
                     <p>
-                        <span th:text="${entry.item.releaseYear}">2024</span>
-                        <span th:text="${entry.item.genre}">Fantasy</span>
+                        <span th:text="${entry.item.releaseYear}"></span>
+                        <span th:text="${entry.item.genre}"></span>
                     </p>
 
-                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+                    <div class="average-rating">
+                        <span class="rating-label">Average rating</span>
 
-                        <input type="hidden" name="mediaId" th:value="${entry.item.id}">
-                        <input type="hidden" name="redirectTo" th:value="${currentPath}">
+                        <span class="rating-value">
+                            <span th:text="${#numbers.formatDecimal(average, 1, 1)}"></span>
+                            / 10
+                        </span>
+                    </div>
 
-                        <div class="review-rating-row">
-                            <label>Your rating</label>
+                    <div th:if="${review != null}" class="saved-review">
 
-                            <input type="number"
-                                   name="rating"
-                                   min="1"
-                                   max="10"
-                                   placeholder="1-10"
-                                   required>
+                        <div class="review-view">
+
+                            <div class="saved-review-header">
+                                <span>Your review</span>
+
+                                <span class="your-rating">
+                                    <span th:text="${review.rating}"></span>
+                                    / 10
+                                </span>
+                            </div>
+
+                            <p class="review-comment"
+                               th:if="${review.comment != null and !review.comment.isBlank()}"
+                               th:text="${review.comment}">
+                            </p>
+
+                            <div class="review-actions">
+
+                                <button type="button"
+                                        class="review-btn"
+                                        onclick="
+                                            this.closest('.saved-review').querySelector('.review-view').hidden = true;
+                                            this.closest('.saved-review').querySelector('.review-edit').hidden = false;
+                                        ">
+                                    Edit
+                                </button>
+
+                                <form th:action="@{/reviews/delete}"
+                                      method="post"
+                                      class="delete-review-form">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.id}">
+
+                                    <input type="hidden"
+                                           name="redirectTo"
+                                           th:value="${currentPath}">
+
+                                    <button type="submit"
+                                            class="review-btn delete-review-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
                         </div>
 
-                        <label class="review-comment-label">
-                            Comment
-                            <textarea name="comment"
-                                      maxlength="350"
-                                      placeholder="What did you think?"></textarea>
-                        </label>
 
-                        <button type="submit" class="review-btn">
-                            Add Review
-                        </button>
+                        <form hidden
+                              class="review-edit"
+                              th:action="@{/reviews/edit}"
+                              method="post">
 
-                    </form>
+                            <input type="hidden"
+                                   name="mediaId"
+                                   th:value="${entry.item.id}">
 
-                </div>
-            </article>
-        </div>
-    </section>
+                            <input type="hidden"
+                                   name="redirectTo"
+                                   th:value="${currentPath}">
 
-    <section class="library-section" id="series">
-        <h2>Series</h2>
+                            <div class="review-rating-row">
+                                <label>Your rating</label>
 
-        <div class="card-row">
-            <article class="entry-card" th:each="entry : ${series}">
-                <img th:src="${entry.item.pictureCover}" alt="Series poster">
+                                <input type="number"
+                                       name="rating"
+                                       min="1"
+                                       max="10"
+                                       th:value="${review.rating}"
+                                       required>
+                            </div>
 
-                <div class="entry-info">
-                    <h3 th:text="${entry.item.name}">Series Title</h3>
+                            <label class="review-comment-label">
+                                Comment
 
-                    <p>
-                        <span th:text="${entry.item.releaseYear}">2024</span>
-                        <span th:text="${entry.item.genre}">Drama</span>
-                    </p>
+                                <textarea name="comment"
+                                          maxlength="350"
+                                          th:text="${review.comment}"></textarea>
+                            </label>
 
+                            <button type="submit" class="review-btn">
+                                Save Changes
+                            </button>
 
-                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+                            <button type="button"
+                                    class="review-btn cancel-edit-btn"
+                                    onclick="
+                                        this.closest('.saved-review').querySelector('.review-edit').hidden = true;
+                                        this.closest('.saved-review').querySelector('.review-view').hidden = false;
+                                    ">
+                                Cancel
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <form th:if="${review == null}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="review-form">
 
                         <input type="hidden"
                                name="mediaId"
@@ -204,7 +272,180 @@
                         </button>
 
                     </form>
-                    
+
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="library-section" id="series">
+        <h2>Series</h2>
+
+        <div class="card-row">
+            <article class="entry-card" th:each="entry : ${series}">
+                <img th:src="${entry.item.pictureCover}" alt="Series poster">
+
+                <div class="entry-info"
+                     th:with="
+                        review=${reviewsByMedia[entry.item.id]},
+                        average=${averagesByMedia[entry.item.id]}">
+
+                    <h3 th:text="${entry.item.name}"></h3>
+
+                    <p>
+                        <span th:text="${entry.item.releaseYear}"></span>
+                        <span th:text="${entry.item.genre}"></span>
+                    </p>
+
+                    <div class="average-rating">
+                        <span class="rating-label">Average rating</span>
+
+                        <span class="rating-value">
+                            <span th:text="${#numbers.formatDecimal(average, 1, 1)}"></span>
+                            / 10
+                        </span>
+                    </div>
+
+                    <div th:if="${review != null}" class="saved-review">
+
+                        <div class="review-view">
+
+                            <div class="saved-review-header">
+                                <span>Your review</span>
+
+                                <span class="your-rating">
+                                <span th:text="${review.rating}"></span>
+                                / 10
+                            </span>
+                            </div>
+
+                            <p class="review-comment"
+                               th:if="${review.comment != null and !review.comment.isBlank()}"
+                               th:text="${review.comment}">
+                            </p>
+
+                            <div class="review-actions">
+
+                                <button type="button"
+                                        class="review-btn"
+                                        onclick="
+                                            this.closest('.saved-review').querySelector('.review-view').hidden = true;
+                                            this.closest('.saved-review').querySelector('.review-edit').hidden = false;
+                                        ">
+                                    Edit
+                                </button>
+
+                                <form th:action="@{/reviews/delete}"
+                                      method="post"
+                                      class="delete-review-form">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.id}">
+
+                                    <input type="hidden"
+                                           name="redirectTo"
+                                           th:value="${currentPath}">
+
+                                    <button type="submit"
+                                            class="review-btn delete-review-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        <form hidden
+                              class="review-edit"
+                              th:action="@{/reviews/edit}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="mediaId"
+                                   th:value="${entry.item.id}">
+
+                            <input type="hidden"
+                                   name="redirectTo"
+                                   th:value="${currentPath}">
+
+                            <div class="review-rating-row">
+                                <label>Your rating</label>
+
+                                <input type="number"
+                                       name="rating"
+                                       min="1"
+                                       max="10"
+                                       th:value="${review.rating}"
+                                       required>
+                            </div>
+
+                            <label class="review-comment-label">
+                                Comment
+
+                                <textarea name="comment"
+                                          maxlength="350"
+                                          th:text="${review.comment}"></textarea>
+                            </label>
+
+                            <button type="submit" class="review-btn">
+                                Save Changes
+                            </button>
+
+                            <button type="button"
+                                    class="review-btn cancel-edit-btn"
+                                    onclick="
+                                        this.closest('.saved-review').querySelector('.review-edit').hidden = true;
+                                        this.closest('.saved-review').querySelector('.review-view').hidden = false;
+                                    ">
+                                Cancel
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <form th:if="${review == null}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="review-form">
+
+                        <input type="hidden"
+                               name="mediaId"
+                               th:value="${entry.item.id}">
+
+                        <input type="hidden"
+                               name="redirectTo"
+                               th:value="${currentPath}">
+
+                        <div class="review-rating-row">
+                            <label>Your rating</label>
+
+                            <input type="number"
+                                   name="rating"
+                                   min="1"
+                                   max="10"
+                                   placeholder="1-10"
+                                   required>
+                        </div>
+
+                        <label class="review-comment-label">
+                            Comment
+
+                            <textarea name="comment"
+                                      maxlength="350"
+                                      placeholder="What did you think?"></textarea>
+                        </label>
+
+                        <button type="submit" class="review-btn">
+                            Add Review
+                        </button>
+
+                    </form>
+
                 </div>
 
 
@@ -219,15 +460,133 @@
             <article class="entry-card" th:each="entry : ${games}">
                 <img th:src="${entry.item.pictureCover}" alt="Game cover">
 
-                <div class="entry-info">
-                    <h3 th:text="${entry.item.name}">Game Title</h3>
+                <div class="entry-info"
+                     th:with="
+                        review=${reviewsByMedia[entry.item.id]},
+                        average=${averagesByMedia[entry.item.id]}">
+
+                    <h3 th:text="${entry.item.name}"></h3>
 
                     <p>
-                        <span th:text="${entry.item.releaseYear}">2024</span>
-                        <span th:text="${entry.item.genre}">RPG</span>
+                        <span th:text="${entry.item.releaseYear}"></span>
+                        <span th:text="${entry.item.genre}"></span>
                     </p>
 
-                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+                    <div class="average-rating">
+                        <span class="rating-label">Average rating</span>
+
+                        <span class="rating-value">
+                            <span th:text="${#numbers.formatDecimal(average, 1, 1)}"></span>
+                            / 10
+                        </span>
+                    </div>
+
+                    <div th:if="${review != null}" class="saved-review">
+
+                        <div class="review-view">
+
+                            <div class="saved-review-header">
+                                <span>Your review</span>
+
+                                <span class="your-rating">
+                                <span th:text="${review.rating}"></span>
+                                / 10
+                            </span>
+                            </div>
+
+                            <p class="review-comment"
+                               th:if="${review.comment != null and !review.comment.isBlank()}"
+                               th:text="${review.comment}">
+                            </p>
+
+                            <div class="review-actions">
+
+                                <button type="button"
+                                        class="review-btn"
+                                        onclick="
+                                            this.closest('.saved-review').querySelector('.review-view').hidden = true;
+                                            this.closest('.saved-review').querySelector('.review-edit').hidden = false;
+                                        ">
+                                    Edit
+                                </button>
+
+                                <form th:action="@{/reviews/delete}"
+                                      method="post"
+                                      class="delete-review-form">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.id}">
+
+                                    <input type="hidden"
+                                           name="redirectTo"
+                                           th:value="${currentPath}">
+
+                                    <button type="submit"
+                                            class="review-btn delete-review-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        <form hidden
+                              class="review-edit"
+                              th:action="@{/reviews/edit}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="mediaId"
+                                   th:value="${entry.item.id}">
+
+                            <input type="hidden"
+                                   name="redirectTo"
+                                   th:value="${currentPath}">
+
+                            <div class="review-rating-row">
+                                <label>Your rating</label>
+
+                                <input type="number"
+                                       name="rating"
+                                       min="1"
+                                       max="10"
+                                       th:value="${review.rating}"
+                                       required>
+                            </div>
+
+                            <label class="review-comment-label">
+                                Comment
+
+                                <textarea name="comment"
+                                          maxlength="350"
+                                          th:text="${review.comment}"></textarea>
+                            </label>
+
+                            <button type="submit" class="review-btn">
+                                Save Changes
+                            </button>
+
+                            <button type="button"
+                                    class="review-btn cancel-edit-btn"
+                                    onclick="
+                                        this.closest('.saved-review').querySelector('.review-edit').hidden = true;
+                                        this.closest('.saved-review').querySelector('.review-view').hidden = false;
+                                    ">
+                                Cancel
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <form th:if="${review == null}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="review-form">
 
                         <input type="hidden"
                                name="mediaId"
@@ -275,15 +634,133 @@
             <article class="entry-card" th:each="entry : ${anime}">
                 <img th:src="${entry.item.pictureCover}" alt="Anime poster">
 
-                <div class="entry-info">
-                    <h3 th:text="${entry.item.name}">Anime Title</h3>
+                <div class="entry-info"
+                     th:with="
+                        review=${reviewsByMedia[entry.item.id]},
+                        average=${averagesByMedia[entry.item.id]}">
+
+                    <h3 th:text="${entry.item.name}"></h3>
 
                     <p>
-                        <span th:text="${entry.item.releaseYear}">2024</span>
-                        <span th:text="${entry.item.genre}">Action</span>
+                        <span th:text="${entry.item.releaseYear}"></span>
+                        <span th:text="${entry.item.genre}"></span>
                     </p>
 
-                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+                    <div class="average-rating">
+                        <span class="rating-label">Average rating</span>
+
+                        <span class="rating-value">
+                            <span th:text="${#numbers.formatDecimal(average, 1, 1)}"></span>
+                            / 10
+                        </span>
+                    </div>
+
+                    <div th:if="${review != null}" class="saved-review">
+
+                        <div class="review-view">
+
+                            <div class="saved-review-header">
+                                <span>Your review</span>
+
+                                <span class="your-rating">
+                                <span th:text="${review.rating}"></span>
+                                / 10
+                            </span>
+                            </div>
+
+                            <p class="review-comment"
+                               th:if="${review.comment != null and !review.comment.isBlank()}"
+                               th:text="${review.comment}">
+                            </p>
+
+                            <div class="review-actions">
+
+                                <button type="button"
+                                        class="review-btn"
+                                        onclick="
+                                            this.closest('.saved-review').querySelector('.review-view').hidden = true;
+                                            this.closest('.saved-review').querySelector('.review-edit').hidden = false;
+                                        ">
+                                    Edit
+                                </button>
+
+                                <form th:action="@{/reviews/delete}"
+                                      method="post"
+                                      class="delete-review-form">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.id}">
+
+                                    <input type="hidden"
+                                           name="redirectTo"
+                                           th:value="${currentPath}">
+
+                                    <button type="submit"
+                                            class="review-btn delete-review-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        <form hidden
+                              class="review-edit"
+                              th:action="@{/reviews/edit}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="mediaId"
+                                   th:value="${entry.item.id}">
+
+                            <input type="hidden"
+                                   name="redirectTo"
+                                   th:value="${currentPath}">
+
+                            <div class="review-rating-row">
+                                <label>Your rating</label>
+
+                                <input type="number"
+                                       name="rating"
+                                       min="1"
+                                       max="10"
+                                       th:value="${review.rating}"
+                                       required>
+                            </div>
+
+                            <label class="review-comment-label">
+                                Comment
+
+                                <textarea name="comment"
+                                          maxlength="350"
+                                          th:text="${review.comment}"></textarea>
+                            </label>
+
+                            <button type="submit" class="review-btn">
+                                Save Changes
+                            </button>
+
+                            <button type="button"
+                                    class="review-btn cancel-edit-btn"
+                                    onclick="
+                                        this.closest('.saved-review').querySelector('.review-edit').hidden = true;
+                                        this.closest('.saved-review').querySelector('.review-view').hidden = false;
+                                    ">
+                                Cancel
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <form th:if="${review == null}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="review-form">
 
                         <input type="hidden"
                                name="mediaId"
@@ -331,15 +808,133 @@
             <article class="entry-card" th:each="entry : ${books}">
                 <img th:src="${entry.item.pictureCover}" alt="Book cover">
 
-                <div class="entry-info">
-                    <h3 th:text="${entry.item.name}">Book Title</h3>
+                <div class="entry-info"
+                     th:with="
+                        review=${reviewsByMedia[entry.item.id]},
+                        average=${averagesByMedia[entry.item.id]}">
+
+                    <h3 th:text="${entry.item.name}"></h3>
 
                     <p>
-                        <span th:text="${entry.item.releaseYear}">2024</span>
-                        <span th:text="${entry.item.genre}">Fantasy</span>
+                        <span th:text="${entry.item.releaseYear}"></span>
+                        <span th:text="${entry.item.genre}"></span>
                     </p>
 
-                    <form th:action="@{/reviews/add}" method="post" class="review-form">
+                    <div class="average-rating">
+                        <span class="rating-label">Average rating</span>
+
+                        <span class="rating-value">
+                            <span th:text="${#numbers.formatDecimal(average, 1, 1)}"></span>
+                            / 10
+                        </span>
+                    </div>
+
+                    <div th:if="${review != null}" class="saved-review">
+
+                        <div class="review-view">
+
+                            <div class="saved-review-header">
+                                <span>Your review</span>
+
+                                <span class="your-rating">
+                                <span th:text="${review.rating}"></span>
+                                / 10
+                            </span>
+                            </div>
+
+                            <p class="review-comment"
+                               th:if="${review.comment != null and !review.comment.isBlank()}"
+                               th:text="${review.comment}">
+                            </p>
+
+                            <div class="review-actions">
+
+                                <button type="button"
+                                        class="review-btn"
+                                        onclick="
+                                            this.closest('.saved-review').querySelector('.review-view').hidden = true;
+                                            this.closest('.saved-review').querySelector('.review-edit').hidden = false;
+                                        ">
+                                    Edit
+                                </button>
+
+                                <form th:action="@{/reviews/delete}"
+                                      method="post"
+                                      class="delete-review-form">
+
+                                    <input type="hidden"
+                                           name="reviewId"
+                                           th:value="${review.id}">
+
+                                    <input type="hidden"
+                                           name="redirectTo"
+                                           th:value="${currentPath}">
+
+                                    <button type="submit"
+                                            class="review-btn delete-review-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        <form hidden
+                              class="review-edit"
+                              th:action="@{/reviews/edit}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="mediaId"
+                                   th:value="${entry.item.id}">
+
+                            <input type="hidden"
+                                   name="redirectTo"
+                                   th:value="${currentPath}">
+
+                            <div class="review-rating-row">
+                                <label>Your rating</label>
+
+                                <input type="number"
+                                       name="rating"
+                                       min="1"
+                                       max="10"
+                                       th:value="${review.rating}"
+                                       required>
+                            </div>
+
+                            <label class="review-comment-label">
+                                Comment
+
+                                <textarea name="comment"
+                                          maxlength="350"
+                                          th:text="${review.comment}"></textarea>
+                            </label>
+
+                            <button type="submit" class="review-btn">
+                                Save Changes
+                            </button>
+
+                            <button type="button"
+                                    class="review-btn cancel-edit-btn"
+                                    onclick="
+                                        this.closest('.saved-review').querySelector('.review-edit').hidden = true;
+                                        this.closest('.saved-review').querySelector('.review-view').hidden = false;
+                                    ">
+                                Cancel
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <form th:if="${review == null}"
+                          th:action="@{/reviews/add}"
+                          method="post"
+                          class="review-form">
 
                         <input type="hidden"
                                name="mediaId"

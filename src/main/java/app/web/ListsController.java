@@ -1,29 +1,33 @@
 package app.web;
 
+import app.model.dto.reviews.ReviewResponse;
 import app.model.entity.item.Medium;
 import app.model.entity.libraryentry.EntryStatus;
 import app.model.entity.libraryentry.LibraryEntry;
 import app.model.entity.user.User;
 import app.service.library.LibraryService;
+import app.service.reviews.ReviewIntegrationService;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
 public class ListsController {
-    private UserService userService;
-    private LibraryService libraryService;
+    private final UserService userService;
+    private final LibraryService libraryService;
+    private final ReviewIntegrationService reviewIntegrationService;
 
-    public ListsController(UserService userService,  LibraryService libraryService) {
+    public ListsController(UserService userService, LibraryService libraryService, ReviewIntegrationService reviewIntegrationService) {
         this.userService = userService;
         this.libraryService = libraryService;
+        this.reviewIntegrationService = reviewIntegrationService;
     }
 
 
@@ -51,6 +55,26 @@ public class ListsController {
         List<LibraryEntry> entries =
                 libraryService.searchEntriesByStatus(userId, status, search);
 
+        Map<UUID, ReviewResponse> reviewsByMedia = new HashMap<>();
+        Map<UUID, Double> averagesByMedia = new HashMap<>();
+
+        for (LibraryEntry entry : entries) {
+
+            UUID mediaId = entry.getItem().getId();
+
+            ReviewResponse review =
+                    reviewIntegrationService.getReview(userId, mediaId);
+
+            if (review != null) {
+                reviewsByMedia.put(mediaId, review);
+            }
+
+            double average =
+                    reviewIntegrationService.getAverageReviews(mediaId);
+
+            averagesByMedia.put(mediaId, average);
+        }
+
         model.addAttribute("user", user);
         model.addAttribute("activePage", activePage);
 
@@ -71,6 +95,9 @@ public class ListsController {
 
         model.addAttribute("currentPath", "/" + activePage);
         model.addAttribute("search", search);
+
+        model.addAttribute("reviewsByMedia", reviewsByMedia);
+        model.addAttribute("averagesByMedia", averagesByMedia);
 
         return "my_nerd_space/lists";
     }

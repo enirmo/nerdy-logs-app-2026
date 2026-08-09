@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -55,9 +56,9 @@ public class ReviewController {
             @PathVariable UUID userId,
             @PathVariable UUID mediaId) {
 
-        ReviewResponse review = reviewService.getReview(userId, mediaId);
-
-        return ResponseEntity.ok(review);
+        return reviewService.getReview(userId, mediaId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/media/{mediaId}/average")

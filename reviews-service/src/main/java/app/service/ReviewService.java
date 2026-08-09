@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -64,16 +65,16 @@ public class ReviewService {
     }
 
     // 4. Get review
-    public ReviewResponse getReview(UUID userId, UUID mediaId) {
-        Review review = reviewRepository
-                .findByUserIdAndMediaId(userId, mediaId)
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+    public Optional<ReviewResponse> getReview(UUID userId, UUID mediaId) {
 
-        return ReviewResponse.builder()
-                .rating(review.getRating())
-                .comment(review.getComment())
-                .lastUpdateTime(review.getLastUpdateTime())
-                .build();
+        return reviewRepository
+                .findByUserIdAndMediaId(userId, mediaId)
+                .map(review -> ReviewResponse.builder()
+                        .id(review.getId())
+                        .rating(review.getRating())
+                        .comment(review.getComment())
+                        .lastUpdateTime(review.getLastUpdateTime())
+                        .build());
     }
 
     // 5. Get average of reviews for this media

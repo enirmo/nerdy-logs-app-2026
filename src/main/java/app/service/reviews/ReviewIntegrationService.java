@@ -3,6 +3,7 @@ package app.service.reviews;
 import app.client.ReviewClient;
 import app.model.dto.reviews.ReviewCreateRequest;
 import app.model.dto.reviews.ReviewResponse;
+import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -29,7 +30,11 @@ public class ReviewIntegrationService {
     }
 
     public ReviewResponse getReview(UUID userId, UUID mediaId) {
-        return reviewClient.getReview(userId, mediaId);
+        try {
+            return reviewClient.getReview(userId, mediaId);
+        } catch (FeignException.NotFound exception) {
+            return null;
+        }
     }
 
     public Double getAverageReviews(UUID mediaId) {

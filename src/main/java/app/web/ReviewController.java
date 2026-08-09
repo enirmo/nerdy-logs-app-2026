@@ -43,4 +43,40 @@ public class ReviewController {
 
         return "redirect:" + redirectTo;
     }
+
+    @PostMapping("/edit")
+    public String editReview(
+            @RequestParam UUID mediaId,
+            @RequestParam int rating,
+            @RequestParam(required = false) String comment,
+            @RequestParam String redirectTo,
+            HttpSession session) {
+
+        UUID userId = (UUID) session.getAttribute("user_id");
+
+        if (userId == null) {
+            return "redirect:/sign-in";
+        }
+
+        ReviewCreateRequest request = ReviewCreateRequest.builder()
+                .userId(userId)
+                .mediaId(mediaId)
+                .rating(rating)
+                .comment(comment)
+                .build();
+
+        reviewIntegrationService.editReview(request);
+
+        return "redirect:" + redirectTo;
+    }
+
+    @PostMapping("/delete")
+    public String deleteReview(
+            @RequestParam UUID reviewId,
+            @RequestParam String redirectTo) {
+
+        reviewIntegrationService.deleteReview(reviewId);
+
+        return "redirect:" + redirectTo;
+    }
 }

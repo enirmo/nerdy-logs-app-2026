@@ -372,13 +372,15 @@ body {
     text-align: center;
 }
 
-.review-comment-label {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.review-form label,
+.review-edit label {
+    color: var(--text-main);
+    font-size: 0.78rem;
+    font-weight: 700;
 }
 
-.review-form textarea {
+.review-form textarea,
+.review-edit textarea {
     width: 100%;
     min-height: 58px;
     max-height: 90px;
@@ -395,6 +397,12 @@ body {
     font-size: 0.78rem;
 
     resize: vertical;
+    outline: none;
+}
+
+.review-edit textarea:focus {
+    border-color: var(--pink-soft);
+    box-shadow: 0 0 12px rgba(255, 199, 220, 0.18);
 }
 
 .review-btn {
@@ -411,3 +419,113 @@ body {
     font-weight: 700;
     cursor: pointer;
 }
+
+.average-rating {
+    margin-top: 12px;
+    padding: 10px 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+}
+
+.rating-label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.rating-value {
+    color: var(--pink-soft);
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.saved-review {
+    margin-top: 10px;
+    padding: 10px 12px;
+
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+}
+
+.saved-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+.saved-review-header > span:first-child {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.your-rating {
+    color: var(--pink-soft);
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.review-comment {
+    margin-top: 6px;
+
+    color: var(--text-main);
+    font-size: 0.78rem;
+    line-height: 1.4;
+
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+
+    overflow-wrap: break-word;
+}
+
+.review-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.review-edit[hidden] {
+    display: none;
+}
+
+.review-view[hidden] {
+    display: none;
+}
+
+.cancel-edit-btn {
+    margin-top: 6px;
+}
+
+.review-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.review-actions > .review-btn,
+.delete-review-form {
+    flex: 1;
+}
+
+.delete-review-form .review-btn {
+    width: 100%;
+}
+
+.delete-review-btn {
+    background: rgba(180, 55, 85, 0.35);
+}
+
+.delete-review-btn:hover {
+    background: rgba(180, 55, 85, 0.55);
+}
+
