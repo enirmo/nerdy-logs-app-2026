@@ -189,6 +189,22 @@ public class ProfileController {
             return "profile/admin";
         }
 
+        try {
+            itemService.createItem(itemRequest);
+
+        } catch (IllegalArgumentException exception) {
+
+            model.addAttribute("errorMessage", exception.getMessage());
+
+            model.addAttribute("showAddForm", true);
+            model.addAttribute("mediums", Medium.values());
+            model.addAttribute("genres", Genre.values());
+            model.addAttribute("items", itemService.searchItems(null));
+            model.addAttribute("users", userService.getAllUsers());
+
+            return "profile/admin";
+        }
+
         itemService.createItem(itemRequest);
         adminLogService.logAction("Added item \"" + itemRequest.getItemName() + "\"");
 
@@ -228,7 +244,9 @@ public class ProfileController {
     // Edit items
     @PostMapping("/admin/catalog/{id}/edit")
     public String editItem(@PathVariable UUID id,
-                           @ModelAttribute ItemRequest itemRequest,HttpSession session) {
+                           @Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
+                           BindingResult bindingResult,
+                           HttpSession session) {
         if (!isAdmin(session)) {
             return "redirect:/sign-in";
         }

@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="/css/library-style.css">
     <link rel="stylesheet" href="/css/admin-style.css">
+    <link rel="stylesheet" href="/css/error.css">
 </head>
 <body>
 
@@ -25,6 +26,12 @@
     <section class="admin-header">
         <h1>Admin Panel</h1>
     </section>
+
+    <!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
+    <div class="page-message error-message"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
 
     <section class="admin-section">
         <div class="section-title">

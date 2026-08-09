@@ -115,3 +115,10 @@
     background: #9f73ff;
     transform: translateY(-1px);
 }
+
+/* THIS NEEDS TO BE CHECKED FOR DUPLICATES LATER */
+.added-success {
+    background: rgba(72, 187, 120, 0.25);
+    border: 1px solid rgba(72, 187, 120, 0.45);
+    color: #b7f7c9;
+}

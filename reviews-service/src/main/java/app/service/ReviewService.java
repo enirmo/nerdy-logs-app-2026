@@ -1,5 +1,6 @@
 package app.service;
 
+import app.messages.ErrorMessages;
 import app.model.dto.ReviewCreateRequest;
 import app.model.dto.ReviewResponse;
 import app.model.entity.Review;
@@ -26,7 +27,7 @@ public class ReviewService {
     // 1. Add review (only to existing library items, ONLY if no review already)
     public void addReview(ReviewCreateRequest request) {
         if (reviewRepository.existsByUserIdAndMediaId(request.getUserId(), request.getMediaId())) {
-            throw new IllegalArgumentException("Review already exists");
+            throw new IllegalArgumentException(ErrorMessages.REVIEW_ALREADY_EXISTS);
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -46,7 +47,7 @@ public class ReviewService {
     public void editReview(ReviewCreateRequest request) {
         Review review = reviewRepository
                 .findByUserIdAndMediaId(request.getUserId(), request.getMediaId())
-                .orElseThrow(() -> new IllegalArgumentException("Review doesn't exist"));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.REVIEW_NOT_FOUND));
 
         review.setRating(request.getRating());
         review.setComment(request.getComment());
@@ -59,7 +60,7 @@ public class ReviewService {
     public void deleteReview(UUID reviewId) {
         Review reviewToDelete = reviewRepository
                 .findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.REVIEW_NOT_FOUND));
 
         reviewRepository.delete(reviewToDelete);
     }

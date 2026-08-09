@@ -1,11 +1,14 @@
 package app.model.dto;
 
+import app.messages.ErrorMessages;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.web.error.ErrorPage;
+
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -18,8 +21,8 @@ public class ReviewCreateRequest {
 
     private UUID mediaId;
 
-    @Min(1)
-    @Max(10)
+    @Min(value = 1, message = ErrorMessages.RATING_MIN)
+    @Max(value = 10, message = ErrorMessages.RATING_MAX)
     private int rating;
 
     private String comment;

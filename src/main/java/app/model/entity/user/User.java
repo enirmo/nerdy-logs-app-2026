@@ -2,12 +2,17 @@ package app.model.entity.user;
 
 import app.model.entity.libraryentry.LibraryEntry;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static app.messages.ErrorMessages.*;
 
 @Builder
 @Getter
@@ -23,10 +28,14 @@ public class User {
     private UUID id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = USERNAME_REQUIRED)
+    @Size(min = 4, max = 20, message = USERNAME_SIZE)
     private String username;
     private String profilePicture;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = EMAIL_REQUIRED)
+    @Email(message = INVALID_EMAIL)
     private String email;
 
     private String password;

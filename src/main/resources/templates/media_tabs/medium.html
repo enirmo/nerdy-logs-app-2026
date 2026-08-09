@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="/css/library-style.css">
     <link rel="stylesheet" href="/css/medium-style.css">
+    <link rel="stylesheet" href="/css/error.css">
 </head>
 
 <body>
@@ -59,7 +60,6 @@
 </aside>
 
 <main class="category-content">
-
     <section class="category-header">
         <h1 th:text="${pageTitle}">Movies</h1>
     </section>
@@ -87,7 +87,8 @@
 
     <section class="category-grid">
 
-        <article class="entry-card" th:each="item : ${items}">
+        <article class="entry-card"
+                 th:each="item : ${items}">
             <img th:src="${item.pictureCover}" alt="Cover">
 
             <div class="entry-info">
@@ -118,8 +119,26 @@
                         <option value="DROPPED">Dropped</option>
                     </select>
 
-                    <button type="submit" class="add-list-btn">
+                    <!--/*@thymesVar id="addedItemId" type=""*/-->
+                    <button type="submit"
+                            class="add-list-btn"
+                            th:if="${(addedItemId == null or !addedItemId.equals(item.id))
+                and (errorItemId == null or !errorItemId.equals(item.id))}">
                         Add to My List
+                    </button>
+
+                    <button type="button"
+                            class="add-list-btn added-success"
+                            th:if="${addedItemId != null and addedItemId.equals(item.id)}"
+                            disabled>
+                        ✓ Added!
+                    </button>
+
+                    <button type="button"
+                            class="add-list-btn added-error"
+                            th:if="${errorItemId != null and errorItemId.equals(item.id)}"
+                            disabled>
+                        Already in library!
                     </button>
 
                 </form>
@@ -135,17 +154,29 @@
 </main>
 
 <script>
+    setTimeout(() => {
+        document.querySelectorAll(".added-success, .added-error").forEach(button => {
+            button.textContent = "Add to My List";
+            button.disabled = false;
+            button.type = "submit";
+            button.classList.remove("added-success", "added-error");
+        });
+    }, 3000);
+
+
     document.querySelectorAll(".add-to-list-form").forEach(form => {
         form.addEventListener("submit", function () {
-            const button = this.querySelector(".add-list-btn");
-
-            button.textContent = "✓ Added!";
-            button.disabled = true;
-
-            setTimeout(() => {
-                this.submit();
-            }, 1200);
+            sessionStorage.setItem("mediaScrollPosition", window.scrollY);
         });
+    });
+
+    window.addEventListener("load", function () {
+        const scrollPosition = sessionStorage.getItem("mediaScrollPosition");
+
+        if (scrollPosition !== null) {
+            window.scrollTo(0, Number(scrollPosition));
+            sessionStorage.removeItem("mediaScrollPosition");
+        }
     });
 </script>
 

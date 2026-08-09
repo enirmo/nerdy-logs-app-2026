@@ -1,5 +1,6 @@
 package app.web;
 
+import app.messages.SuccessMessages;
 import app.model.dto.reviews.ReviewResponse;
 import app.model.entity.item.Medium;
 import app.model.entity.libraryentry.EntryStatus;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -147,10 +149,13 @@ public class ListsController {
 
     // ADD top library
     @PostMapping("/library/add")
-    public String addToLibrary(@RequestParam UUID itemId,
-                               @RequestParam EntryStatus entryStatus,
-                               @RequestParam String redirectTo,
-                               HttpSession session) {
+    public String addToLibrary(
+            @RequestParam UUID itemId,
+            @RequestParam EntryStatus entryStatus,
+            @RequestParam String redirectTo,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
         UUID userId = (UUID) session.getAttribute("user_id");
 
         if (userId == null) {
@@ -158,26 +163,49 @@ public class ListsController {
         }
 
         if (redirectTo == null || redirectTo.isBlank()) {
-            redirectTo = "/sign-in";
+            redirectTo = "/";
         }
 
-        libraryService.addItemToLibrary(userId, itemId, entryStatus);
+        try {
+            libraryService.addItemToLibrary(userId, itemId, entryStatus);
+
+            redirectAttributes.addFlashAttribute(
+                    "addedItemId",
+                    itemId
+            );
+
+        } catch (IllegalArgumentException exception) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorItemId",
+                    itemId
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    exception.getMessage()
+            );
+        }
 
         return "redirect:" + redirectTo;
     }
 
     // REMOVE from library
     @PostMapping("/library/remove")
-    public String removeFromLibrary(@RequestParam UUID entryId,
-                                    @RequestParam String redirectTo,
-                                    HttpSession session) {
-        UUID userId = (UUID) session.getAttribute("user_id");
+    public String removeFromLibrary(
+            @RequestParam UUID entryId,
+            @RequestParam String redirectTo,
+            RedirectAttributes redirectAttributes) {
 
-        if (userId == null) {
-            return "redirect:/sign-in";
+        try {
+            libraryService.removeFromLibrary(entryId);
+
+        } catch (IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    exception.getMessage()
+            );
         }
-
-        libraryService.removeFromLibrary(entryId);
 
         return "redirect:" + redirectTo;
     }

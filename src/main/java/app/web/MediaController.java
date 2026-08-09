@@ -24,71 +24,89 @@ public class MediaController {
 
 
     // Helper
-    private void addLoggedUser(Model model, HttpSession session) {
+    private boolean addLoggedUser(Model model, HttpSession session) {
         UUID userId = (UUID) session.getAttribute("user_id");
 
-        if (userId != null) {
-            model.addAttribute("user", userService.getById(userId));
+        if (userId == null) {
+            return false;
         }
+
+        model.addAttribute("user", userService.getById(userId));
+        return true;
     }
 
     // ADD ITEM for each category
     @GetMapping("/movies")
     public String movies(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!addLoggedUser(model, session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("pageTitle", "Movies");
         model.addAttribute("items", itemService.searchByMedium(Medium.MOVIE, search));
         model.addAttribute("currentPath", "/movies");
         model.addAttribute("search", search);
-
-        addLoggedUser(model, session);
 
         return "media_tabs/medium";
     }
 
     @GetMapping("/series")
     public String series(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!addLoggedUser(model, session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("pageTitle", "Series");
         model.addAttribute("items", itemService.searchByMedium(Medium.SERIES, search));
         model.addAttribute("currentPath", "/series");
         model.addAttribute("search", search);
-
-        addLoggedUser(model, session);
 
         return "media_tabs/medium";
     }
 
     @GetMapping("/games")
     public String games(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!addLoggedUser(model, session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("pageTitle", "Games");
         model.addAttribute("items", itemService.searchByMedium(Medium.GAME, search));
         model.addAttribute("currentPath", "/games");
         model.addAttribute("search", search);
-
-        addLoggedUser(model, session);
 
         return "media_tabs/medium";
     }
 
     @GetMapping("/anime")
     public String anime(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!addLoggedUser(model, session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("pageTitle", "Anime");
         model.addAttribute("items", itemService.searchByMedium(Medium.ANIME, search));
         model.addAttribute("currentPath", "/anime");
         model.addAttribute("search", search);
-
-        addLoggedUser(model, session);
 
         return "media_tabs/medium";
     }
 
     @GetMapping("/books")
     public String books(@RequestParam(required = false) String search, Model model, HttpSession session) {
+
+        if (!addLoggedUser(model, session)) {
+            return "redirect:/sign-in";
+        }
+
         model.addAttribute("pageTitle", "Books");
         model.addAttribute("items", itemService.searchByMedium(Medium.BOOK, search));
         model.addAttribute("currentPath", "/books");
         model.addAttribute("search", search);
-
-        addLoggedUser(model, session);
 
         return "media_tabs/medium";
     }

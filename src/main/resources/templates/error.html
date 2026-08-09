@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Oops! | Nerdy Logs</title>
+
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+
+<body class="error-body">
+
+<header class="top-navbar">
+    <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Nerdy Logs Logo">
+    </a>
+</header>
+
+<main class="error-page">
+
+    <div class="error-card">
+
+        <img th:src="@{/images/500.avif}"
+             alt="500 Internal Server Error"
+             class="error-image">
+
+        <h1>Oops!</h1>
+
+        <p class="error-description"
+           th:text="${errorMessage}">
+            Something went wrong. Please try again.
+        </p>
+
+        <div class="error-actions">
+
+            <a th:href="@{/}" class="error-btn">
+                Back to Home
+            </a>
+
+            <button type="button"
+                    class="error-btn secondary"
+                    onclick="history.back()">
+                Go Back
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>
