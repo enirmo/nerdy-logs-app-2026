@@ -1,4 +1,4 @@
-package app.library;
+package app.service.library;
 
 import app.exceptions.ItemNotFoundException;
 import app.exceptions.ResourceAlreadyExistsException;

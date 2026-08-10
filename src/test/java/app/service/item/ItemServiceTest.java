@@ -1,4 +1,4 @@
-package app.item;
+package app.service.item;
 
 import app.exceptions.ItemNotFoundException;
 import app.model.dto.item.ItemRequest;

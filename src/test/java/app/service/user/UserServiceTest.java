@@ -1,4 +1,4 @@
-package app.user;
+package app.service.user;
 
 import app.config.UserProperties;
 import app.model.dto.user.UserLoginRequest;
