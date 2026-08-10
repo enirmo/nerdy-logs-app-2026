@@ -31,39 +31,6 @@ public class IndexController {
         return "sign_in_pages/sign-in";
     }
 
-    /* @PostMapping("/sign-in")
-    public String setSignIn(
-            @Valid @ModelAttribute("userLoginRequest") UserLoginRequest userLoginRequest,
-            BindingResult bindingResult,
-            HttpSession session,
-            Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "sign_in_pages/sign-in";
-        }
-
-        try {
-            User user = userService.login(userLoginRequest);
-
-            session.setAttribute("user_id", user.getId());
-            session.setAttribute("role", user.getRole());
-
-            if (user.getRole() == Role.ADMIN) {
-                return "redirect:/admin";
-            }
-
-            return "redirect:/watchlist";
-
-        } catch (IllegalArgumentException exception) {
-            model.addAttribute(
-                    "errorMessage",
-                    ErrorMessages.INVALID_CREDENTIALS
-            );
-
-            return "sign_in_pages/sign-in";
-        }
-    } */
-
     // REGISTER MAP and POST
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
@@ -106,25 +73,4 @@ public class IndexController {
 
         return "error";
     }
-
-
-    /* TEST ERRORS
-
-    @GetMapping("/test-error")
-    public String testError() {
-        throw new RuntimeException("Testing global error handler");
-    }
-
-    @GetMapping("/test-bad-request/{id}")
-    public String testBadRequest(@PathVariable UUID id) {
-        return "redirect:/";
-    }
-
-
-    @GetMapping("/security-test")
-    @ResponseBody
-    public String securityTest(Authentication authentication) {
-        return "Logged in as: " + authentication.getName();
-    }
-    */
 }

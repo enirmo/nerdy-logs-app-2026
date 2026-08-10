@@ -8,7 +8,6 @@ import app.service.item.ItemService;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -247,6 +246,36 @@ public class ProfileController {
     public String deleteUser(@PathVariable UUID id) {
 
         userService.deleteUser(id);
+        return "redirect:/admin";
+    }
+
+    // Change user role
+    @PostMapping("/admin/users/{id}/role")
+    public String changeUserRole(
+            @PathVariable UUID id,
+            @RequestParam Role role,
+            Authentication authentication) {
+
+        User currentAdmin = userService.getByUsername(authentication.getName());
+
+        if (currentAdmin.getId().equals(id)) {
+            return "redirect:/admin";
+        }
+
+        User user = userService.getById(id);
+        Role previousRole = user.getRole();
+
+        userService.changeRole(id, role);
+
+        adminLogService.logAction(
+                "Changed role for user \""
+                        + user.getUsername()
+                        + "\" from "
+                        + previousRole
+                        + " to "
+                        + role
+        );
+
         return "redirect:/admin";
     }
 }

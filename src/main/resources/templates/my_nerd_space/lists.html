@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>My Library | Nerdy Logs</title>
@@ -32,12 +34,12 @@
 
         </div>
 
-        <a th:if="${user.role.name() == 'ADMIN'}"
+        <a sec:authorize="hasRole('ADMIN')"
            href="/admin">
             Admin Panel
         </a>
 
-        <a th:if="${user.role.name() == 'ADMIN'}"
+        <a sec:authorize="hasRole('ADMIN')"
            href="/admin/changelog">
             Admin changelog
         </a>

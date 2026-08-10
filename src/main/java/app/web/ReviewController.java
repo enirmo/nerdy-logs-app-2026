@@ -6,7 +6,6 @@ import app.model.entity.user.User;
 import app.service.reviews.ReviewIntegrationService;
 import app.service.user.UserService;
 import feign.FeignException;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

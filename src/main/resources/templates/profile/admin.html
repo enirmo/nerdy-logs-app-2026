@@ -173,8 +173,7 @@
 
             <div class="table-row" th:each="item : ${items}">
 
-                <a th:href="@{/admin/catalog/{id}(id=${item.id})}"
-                   th:text="${item.name}"
+                <a th:text="${item.name}"
                    class="item-title">
                     Item Title
                 </a>
@@ -233,6 +232,24 @@
                 <div th:if="${#lists.isEmpty(users)}" class="empty-state">
                     No users found.
                 </div>
+
+                <form th:if="${#authentication.name != user.username}"
+                      th:action="@{/admin/users/{id}/role(id=${user.id})}"
+                      method="post"
+                      class="role-form">
+
+                    <input type="hidden"
+                           name="role"
+                           th:value="${user.role.name() == 'ADMIN' ? 'USER' : 'ADMIN'}">
+
+                    <button type="submit"
+                            class="role-btn"
+                            th:text="${user.role.name() == 'ADMIN'
+                    ? 'Demote to User'
+                    : 'Promote to Admin'}">
+                    </button>
+
+                </form>
 
                 <form th:action="@{/admin/users/{id}/delete(id=${user.id})}"
                       method="post"

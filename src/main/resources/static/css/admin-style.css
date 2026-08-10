@@ -124,6 +124,18 @@
     background: rgba(255,255,255,0.06);
 }
 
+.item-title {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+
+    transition: color 0.2s ease;
+}
+
+.item-title:hover {
+    color: var(--pink-soft);
+}
+
 select option {
     background-color: #3b2d4d;
     color: white;
@@ -165,6 +177,30 @@ select option {
     background: rgba(255,255,255,0.12);
     color: var(--text-main);
     border: 1px solid rgba(255,255,255,0.18);
+}
+
+.role-btn {
+    padding: 0;
+    margin-right: 10px;
+
+    background: transparent;
+    border: none;
+
+    color: var(--text-main);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.role-btn:hover {
+    color: cornflowerblue;
+    border: 1px solid cornflowerblue;
+    border-radius: 18px;
+    padding: 9px 14px;
+    transform: translateY(-1px);
 }
 
 .small-btn.danger {
