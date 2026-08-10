@@ -1,7 +1,6 @@
 package app.service.item;
 
 import app.exceptions.ItemNotFoundException;
-import app.exceptions.ResourceAlreadyExistsException;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
