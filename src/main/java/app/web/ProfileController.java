@@ -6,8 +6,12 @@ import app.model.entity.user.User;
 import app.service.adminlog.AdminLogService;
 import app.service.item.ItemService;
 import app.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,31 +35,12 @@ public class ProfileController {
         this.adminLogService = adminLogService;
     }
 
-    // Check if user is admin
-    private boolean isAdmin(HttpSession session) {
-        UUID userId = (UUID) session.getAttribute("user_id");
-
-        if (userId == null) {
-            return false;
-        }
-
-        User user = userService.getById(userId);
-
-        return user.getRole() == Role.ADMIN;
-    }
-
     // USER side
 
     // Show user profile
     @GetMapping("/profile")
-    public String getUserPage(HttpSession session, Model model) {
-        UUID userId = (UUID) session.getAttribute("user_id");
-
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
-
-        User user = userService.getById(userId);
+    public String getUserPage(Authentication authentication, Model model) {
+        User user = userService.getByUsername(authentication.getName());
 
         model.addAttribute("user", user);
 
@@ -67,12 +52,10 @@ public class ProfileController {
     @PostMapping("/profile/edit")
     public String editProfile(@RequestParam String profilePicture,
                               @RequestParam String bio,
-                              HttpSession session) {
-        UUID userId = (UUID) session.getAttribute("user_id");
+                              Authentication authentication) {
 
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
+        User user = userService.getByUsername(authentication.getName());
+        UUID userId = user.getId();
 
         userService.updateProfile(userId, profilePicture, bio);
 
@@ -82,17 +65,19 @@ public class ProfileController {
 
     // Delete user profile - user side
     @PostMapping("/profile/delete")
-    public String deleteOwnProfile(HttpSession session) {
-        UUID userId = (UUID) session.getAttribute("user_id");
+    public String deleteOwnProfile(
+            Authentication authentication,
+            HttpServletRequest request,
+            HttpServletResponse response) {
 
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
+        User user = userService.getByUsername(authentication.getName());
 
-        userService.deleteUser(userId);
-        session.invalidate();
+        userService.deleteUser(user.getId());
 
-        return "redirect:/";
+        new SecurityContextLogoutHandler()
+                .logout(request, response, authentication);
+
+        return "redirect:/sign-in";
     }
 
 
@@ -103,12 +88,7 @@ public class ProfileController {
     @GetMapping("/admin")
     public String getAdminPage(@RequestParam(required = false) String itemSearch,
                                @RequestParam(required = false) String userSearch,
-                               Model model,
-                               HttpSession session) {
-
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+                               Model model) {
 
         model.addAttribute("items", itemService.searchItems(itemSearch));
         model.addAttribute("users", userService.searchUsers(userSearch));
@@ -123,10 +103,7 @@ public class ProfileController {
 
     // Get all items on admin panel
     @GetMapping("/admin/items/all")
-    public String getAllAdminItems(Model model, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String getAllAdminItems(Model model) {
 
         model.addAttribute("items", itemService.getAllItems());
         model.addAttribute("users", userService.getAllUsers());
@@ -137,11 +114,7 @@ public class ProfileController {
 
     // Get admin action history
     @GetMapping("/admin/changelog")
-    public String getHistoryPage(@RequestParam(required = false) String search, Model model, HttpSession session) {
-
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String getHistoryPage(@RequestParam(required = false) String search, Model model) {
 
         model.addAttribute("logs", adminLogService.searchLogs(search));
         model.addAttribute("search", search);
@@ -151,10 +124,7 @@ public class ProfileController {
 
     // Show add item panel with all info to fill out
     @GetMapping("/admin/items/add")
-    public String getAddItemPage(Model model, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String getAddItemPage(Model model) {
 
         model.addAttribute("showAddForm", true);
         model.addAttribute("itemRequest", ItemRequest.builder().build());
@@ -171,11 +141,7 @@ public class ProfileController {
     @PostMapping("/admin/items/add")
     public String addItem(@Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
                           BindingResult bindingResult,
-                          Model model,
-                          HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+                          Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("showAddForm", true);
@@ -212,10 +178,7 @@ public class ProfileController {
 
     // Get edit item panel
     @GetMapping("/admin/catalog/{id}/edit")
-    public String getEditItemPage(@PathVariable UUID id, Model model,HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String getEditItemPage(@PathVariable UUID id, Model model) {
 
         Item item = itemService.getItem(id);
 
@@ -246,12 +209,7 @@ public class ProfileController {
             @PathVariable UUID id,
             @Valid @ModelAttribute("itemRequest") ItemRequest itemRequest,
             BindingResult bindingResult,
-            Model model,
-            HttpSession session) {
-
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+            Model model) {
 
         if (bindingResult.hasErrors()) {
 
@@ -278,10 +236,7 @@ public class ProfileController {
 
     // Delete items - admin side
     @PostMapping("/admin/items/{id}/delete")
-    public String deleteItem(@PathVariable UUID id, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String deleteItem(@PathVariable UUID id) {
 
         itemService.deleteItem(id);
         return "redirect:/admin";
@@ -289,10 +244,7 @@ public class ProfileController {
 
     // Delete user - admin side
     @PostMapping("/admin/users/{id}/delete")
-    public String deleteUser(@PathVariable UUID id, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/sign-in";
-        }
+    public String deleteUser(@PathVariable UUID id) {
 
         userService.deleteUser(id);
         return "redirect:/admin";

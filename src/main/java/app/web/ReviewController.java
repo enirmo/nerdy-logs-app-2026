@@ -2,9 +2,12 @@ package app.web;
 
 import app.messages.ErrorMessages;
 import app.model.dto.reviews.ReviewCreateRequest;
+import app.model.entity.user.User;
 import app.service.reviews.ReviewIntegrationService;
+import app.service.user.UserService;
 import feign.FeignException;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,9 +19,11 @@ import java.util.UUID;
 public class ReviewController {
 
     private final ReviewIntegrationService reviewIntegrationService;
+    private final UserService userService;
 
-    public ReviewController(ReviewIntegrationService reviewIntegrationService) {
+    public ReviewController(ReviewIntegrationService reviewIntegrationService, UserService userService) {
         this.reviewIntegrationService = reviewIntegrationService;
+        this.userService = userService;
     }
 
     @PostMapping("/add")
@@ -27,14 +32,11 @@ public class ReviewController {
             @RequestParam int rating,
             @RequestParam(required = false) String comment,
             @RequestParam String redirectTo,
-            HttpSession session,
+            Authentication authentication,
             RedirectAttributes redirectAttributes) {
 
-        UUID userId = (UUID) session.getAttribute("user_id");
-
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
+        User user = userService.getByUsername(authentication.getName());
+        UUID userId = user.getId();
 
         ReviewCreateRequest request = ReviewCreateRequest.builder()
                 .userId(userId)
@@ -62,10 +64,11 @@ public class ReviewController {
             @RequestParam int rating,
             @RequestParam(required = false) String comment,
             @RequestParam String redirectTo,
-            HttpSession session,
+            Authentication authentication,
             RedirectAttributes redirectAttributes) {
 
-        UUID userId = (UUID) session.getAttribute("user_id");
+        User user = userService.getByUsername(authentication.getName());
+        UUID userId = user.getId();
 
         if (userId == null) {
             return "redirect:/sign-in";

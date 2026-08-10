@@ -127,6 +127,14 @@ public class UserService {
         );
     }
 
+    // Change user role
+    public void changeRole(UUID userId, Role role) {
+        User user = getById(userId);
+
+        user.setRole(role);
+        userRepository.save(user);
+    }
+
     // Search users - for admins
     public List<User> searchUsers(String search) {
         if (search == null || search.isBlank()) {
@@ -134,6 +142,12 @@ public class UserService {
         }
 
         return userRepository.findByUsernameContainingIgnoreCase(search);
+    }
+
+    // Find user by username
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
 }

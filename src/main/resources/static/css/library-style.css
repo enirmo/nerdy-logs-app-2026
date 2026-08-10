@@ -59,21 +59,48 @@ body {
 
 .category-tabs {
     display: flex;
+    align-items: center;
     gap: 14px;
 }
 
 .category-tabs a {
     text-decoration: none;
     color: var(--text-main);
-
     padding: 10px 18px;
     border-radius: 999px;
-
     font-weight: 900;
     transition: 0.25s ease;
 }
 
-.category-tabs a:hover {
+.logout-form {
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+}
+
+.category-tabs .logout-btn {
+    text-decoration: none;
+    color: var(--text-main);
+
+    padding: 10px 18px;
+    border-radius: 999px;
+
+    background: none;
+    border: none;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 900;
+    line-height: normal;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.category-tabs .logout-btn:hover,
+.category-tabs a:hover{
     background: var(--pink-soft);
     color: var(--bg-dark);
     transform: translateY(-2px);

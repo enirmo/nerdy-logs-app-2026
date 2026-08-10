@@ -16,24 +16,34 @@
     </a>
 
     <nav class="category-tabs">
-        <nav class="category-tabs">
-            <div class="dropdown">
-                <button class="dropdown-btn">
-                    Catalog ▾
-                </button>
+        <div class="dropdown">
+            <button class="dropdown-btn">
+                Catalog ▾
+            </button>
 
-                <div class="dropdown-content">
-                    <a href="/movies">Movies</a>
-                    <a href="/series">Series</a>
-                    <a href="/games">Games</a>
-                    <a href="/anime">Anime</a>
-                    <a href="/books">Books</a>
-                </div>
+            <div class="dropdown-content">
+                <a href="/movies">Movies</a>
+                <a href="/series">Series</a>
+                <a href="/games">Games</a>
+                <a href="/anime">Anime</a>
+                <a href="/books">Books</a>
             </div>
+        </div>
 
         <a href="/admin">Admin Panel</a>
-        <a href="/logout">Logout</a>
+
+        <form th:action="@{/logout}"
+              method="post"
+              class="logout-form">
+
+            <button type="submit"
+                    class="logout-btn">
+                Logout
+            </button>
+
+        </form>
     </nav>
+
 </header>
 
 <main class="history-content">

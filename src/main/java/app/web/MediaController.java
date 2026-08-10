@@ -1,13 +1,14 @@
 package app.web;
 
 import app.model.entity.item.Medium;
+import app.model.entity.user.User;
 import app.service.item.ItemService;
 import app.service.user.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
 
 import java.util.UUID;
 
@@ -24,30 +25,20 @@ public class MediaController {
 
 
     // Helper
-    private boolean addLoggedUser(Model model, HttpSession session) {
-        UUID userId = (UUID) session.getAttribute("user_id");
+    private void addLoggedUser(Model model, Authentication authentication) {
+        User user = userService.getByUsername(authentication.getName());
 
-        if (userId == null) {
-            return false;
-        }
-
-        try {
-            model.addAttribute("user", userService.getById(userId));
-            return true;
-
-        } catch (IllegalArgumentException exception) {
-            session.invalidate();
-            return false;
-        }
+        model.addAttribute("user", user);
     }
 
     // ADD ITEM for each category
     @GetMapping("/movies")
-    public String movies(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String movies(
+            @RequestParam(required = false) String search,
+            Model model,
+            Authentication authentication) {
 
-        if (!addLoggedUser(model, session)) {
-            return "redirect:/sign-in";
-        }
+        addLoggedUser(model, authentication);
 
         model.addAttribute("pageTitle", "Movies");
         model.addAttribute("items", itemService.searchByMedium(Medium.MOVIE, search));
@@ -58,11 +49,9 @@ public class MediaController {
     }
 
     @GetMapping("/series")
-    public String series(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String series(@RequestParam(required = false) String search, Model model, Authentication authentication) {
 
-        if (!addLoggedUser(model, session)) {
-            return "redirect:/sign-in";
-        }
+        addLoggedUser(model, authentication);
 
         model.addAttribute("pageTitle", "Series");
         model.addAttribute("items", itemService.searchByMedium(Medium.SERIES, search));
@@ -73,11 +62,9 @@ public class MediaController {
     }
 
     @GetMapping("/games")
-    public String games(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String games(@RequestParam(required = false) String search, Model model, Authentication authentication) {
 
-        if (!addLoggedUser(model, session)) {
-            return "redirect:/sign-in";
-        }
+        addLoggedUser(model, authentication);
 
         model.addAttribute("pageTitle", "Games");
         model.addAttribute("items", itemService.searchByMedium(Medium.GAME, search));
@@ -88,11 +75,9 @@ public class MediaController {
     }
 
     @GetMapping("/anime")
-    public String anime(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String anime(@RequestParam(required = false) String search, Model model, Authentication authentication) {
 
-        if (!addLoggedUser(model, session)) {
-            return "redirect:/sign-in";
-        }
+        addLoggedUser(model, authentication);
 
         model.addAttribute("pageTitle", "Anime");
         model.addAttribute("items", itemService.searchByMedium(Medium.ANIME, search));
@@ -103,11 +88,9 @@ public class MediaController {
     }
 
     @GetMapping("/books")
-    public String books(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String books(@RequestParam(required = false) String search, Model model, Authentication authentication) {
 
-        if (!addLoggedUser(model, session)) {
-            return "redirect:/sign-in";
-        }
+        addLoggedUser(model, authentication);
 
         model.addAttribute("pageTitle", "Books");
         model.addAttribute("items", itemService.searchByMedium(Medium.BOOK, search));

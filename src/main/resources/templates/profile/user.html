@@ -33,7 +33,16 @@
 
     </div>
 
-    <a href="/logout">Logout</a>
+    <form th:action="@{/logout}"
+          method="post"
+          class="logout-form">
+
+      <button type="submit"
+              class="logout-btn">
+        Logout
+      </button>
+
+    </form>
 
   </nav>
 </header>

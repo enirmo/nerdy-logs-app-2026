@@ -1,23 +1,14 @@
 package app.web;
 
-import app.exceptions.ItemNotFoundException;
-import app.messages.ErrorMessages;
 import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
-import app.model.entity.user.Role;
-import app.model.entity.user.User;
 import app.service.user.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class IndexController {
@@ -40,7 +31,7 @@ public class IndexController {
         return "sign_in_pages/sign-in";
     }
 
-    @PostMapping("/sign-in")
+    /* @PostMapping("/sign-in")
     public String setSignIn(
             @Valid @ModelAttribute("userLoginRequest") UserLoginRequest userLoginRequest,
             BindingResult bindingResult,
@@ -71,7 +62,7 @@ public class IndexController {
 
             return "sign_in_pages/sign-in";
         }
-    }
+    } */
 
     // REGISTER MAP and POST
     @GetMapping("/sign-up")
@@ -102,11 +93,18 @@ public class IndexController {
         }
     }
 
-    // LOGOUT
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
+    // Access denied
+    @GetMapping("/access-denied")
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String accessDenied(Model model) {
+
+        model.addAttribute("errorCode", 403);
+        model.addAttribute(
+                "errorMessage",
+                "You shall not pass!"
+        );
+
+        return "error";
     }
 
 
@@ -121,6 +119,12 @@ public class IndexController {
     public String testBadRequest(@PathVariable UUID id) {
         return "redirect:/";
     }
-    
+
+
+    @GetMapping("/security-test")
+    @ResponseBody
+    public String securityTest(Authentication authentication) {
+        return "Logged in as: " + authentication.getName();
+    }
     */
 }

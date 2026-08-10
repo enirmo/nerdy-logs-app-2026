@@ -1,6 +1,5 @@
 package app.web;
 
-import app.messages.SuccessMessages;
 import app.model.dto.reviews.ReviewResponse;
 import app.model.entity.item.Medium;
 import app.model.entity.libraryentry.EntryStatus;
@@ -10,6 +9,7 @@ import app.service.library.LibraryService;
 import app.service.reviews.ReviewIntegrationService;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +44,10 @@ public class ListsController {
             EntryStatus status,
             String activePage,
             String search, Model model,
-            HttpSession session) {
+            Authentication authentication) {
 
-        UUID userId = (UUID) session.getAttribute("user_id");
-
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
-
-        User user = userService.getById(userId);
+        User user = userService.getByUsername(authentication.getName());
+        UUID userId = user.getId();
 
         List<LibraryEntry> entries =
                 libraryService.searchEntriesByStatus(userId, status, search);
@@ -107,43 +102,46 @@ public class ListsController {
 
     // All lists GET
     @GetMapping("/watchlist")
-    public String watchlist(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String watchlist(@RequestParam(required = false) String search, Model model, Authentication authentication) {
         return loadLibraryPage(
                 EntryStatus.PLANNED,
                 "watchlist",
                 search,
                 model,
-                session
+                authentication
         );
     }
 
     @GetMapping("/completed")
-    public String completed(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String completed(@RequestParam(required = false) String search, Model model, Authentication authentication) {
         return loadLibraryPage(
                 EntryStatus.COMPLETED,
                 "completed",
                 search,
                 model,
-                session);
+                authentication
+        );
     }
 
     @GetMapping("/in-progress")
-    public String inProgress(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String inProgress(@RequestParam(required = false) String search, Model model, Authentication authentication) {
         return loadLibraryPage(
                 EntryStatus.STARTED,
                 "in-progress",
                 search,
                 model,
-                session);
+                authentication
+        );
     }
 
     @GetMapping("/dropped")
-    public String dropped(@RequestParam(required = false) String search, Model model, HttpSession session) {
+    public String dropped(@RequestParam(required = false) String search, Model model, Authentication authentication) {
         return loadLibraryPage(
                 EntryStatus.DROPPED,
                 "dropped",
                 search, model,
-                session);
+                authentication
+        );
     }
 
 
@@ -153,14 +151,11 @@ public class ListsController {
             @RequestParam UUID itemId,
             @RequestParam EntryStatus entryStatus,
             @RequestParam String redirectTo,
-            HttpSession session,
+            Authentication authentication,
             RedirectAttributes redirectAttributes) {
 
-        UUID userId = (UUID) session.getAttribute("user_id");
-
-        if (userId == null) {
-            return "redirect:/sign-in";
-        }
+        User user = userService.getByUsername(authentication.getName());
+        UUID userId = user.getId();
 
         if (redirectTo == null || redirectTo.isBlank()) {
             redirectTo = "/";
