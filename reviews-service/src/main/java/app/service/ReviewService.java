@@ -19,11 +19,9 @@ import java.util.UUID;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final List<Integer> ratings;
 
-    public ReviewService(ReviewRepository reviewRepository, List<Integer> ratings) {
+    public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
-        this.ratings = ratings;
     }
 
     // 1. Add review (only to existing library items, ONLY if no review already)
