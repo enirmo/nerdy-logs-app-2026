@@ -4,8 +4,6 @@ import app.model.entity.item.Item;
 import app.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -30,7 +28,4 @@ public class LibraryEntry {
     // ONE OF: COMPLETED, STARTED, DROPPED, PLANNED
     @Enumerated(EnumType.STRING)
     private EntryStatus entryStatus;
-
-    private LocalDateTime addedOn;
-    private LocalDateTime completedOn;
 }

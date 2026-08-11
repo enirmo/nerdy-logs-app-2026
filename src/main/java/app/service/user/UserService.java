@@ -6,6 +6,7 @@ import app.model.entity.user.User;
 import app.repository.library.LibraryRepository;
 import app.repository.user.UserRepository;
 import app.service.adminlog.AdminLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import static app.messages.ErrorMessages.*;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -42,7 +44,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void register(UserRegisterRequest userRegisterRequest){
+    public void register(UserRegisterRequest userRegisterRequest) {
+        log.info("Registering new user with username {}", userRegisterRequest.getUsername());
+
         // 1. Check if username/email exist
          userRepository.findByUsername(userRegisterRequest.getUsername())
                 .ifPresent(user -> {
@@ -70,11 +74,15 @@ public class UserService {
                  .createdOn(now)
                  .updatedOn(now)
                  .build();
+
          userRepository.save(user);
+         log.info("User {} registered successfully", userRegisterRequest.getUsername());
     }
 
     // Update profile - user side
     public void updateProfile(UUID userId, String profilePicture, String bio) {
+        log.info("Updating profile for user {}", userId);
+
         User user = getById(userId);
 
         user.setProfilePicture(profilePicture);
@@ -82,7 +90,7 @@ public class UserService {
         user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
-
+        log.info("Profile successfully updated for user {}", userId);
     }
 
     // Delete user - this is for admins

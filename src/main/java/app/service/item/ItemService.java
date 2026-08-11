@@ -6,6 +6,7 @@ import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
 import app.repository.item.ItemRepository;
 import app.service.adminlog.AdminLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static app.messages.ErrorMessages.ITEM_ALREADY_ADDED;
 import static app.messages.ErrorMessages.ITEM_NOT_FOUND;
 
+@Slf4j
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
@@ -37,6 +39,8 @@ public class ItemService {
     // Check if the item already exists and add it if not
     @CacheEvict(value = "items", allEntries = true)
     public void createItem(ItemRequest itemRequest) {
+        log.info("Creating new item: {}", itemRequest.getItemName());
+
         itemRepository.findByName(itemRequest.getItemName())
                 .ifPresent(item -> {
                     throw new IllegalArgumentException(String.format(ITEM_ALREADY_ADDED, itemRequest.getItemName()));
@@ -53,6 +57,7 @@ public class ItemService {
                 .build();
 
         itemRepository.save(item);
+        log.info("Item {} created successfully", item.getId());
     }
 
 
@@ -84,6 +89,8 @@ public class ItemService {
     // Update
     @CacheEvict(value = "items", allEntries = true)
     public void updateItem(UUID itemId, ItemRequest request) {
+        log.info("Updating item {}", itemId);
+
         Item item = getItemOrThrow(itemId);
 
         item.setName(request.getItemName());
@@ -94,16 +101,20 @@ public class ItemService {
         item.setReleaseYear(request.getReleaseYear());
 
         itemRepository.save(item);
+        log.info("Item {} updated successfully", itemId);
     }
 
     // Delete
     @CacheEvict(value = "items", allEntries = true)
     public void deleteItem(UUID itemId) {
+        log.info("Deleting item {}", itemId);
+
         Item item = getItemOrThrow(itemId);
 
         itemRepository.delete(item);
 
         adminLogService.logAction("Deleted item \"" + item.getName() + "\" from library.");
+        log.info("Item {} deleted successfully", itemId);
     }
 
 

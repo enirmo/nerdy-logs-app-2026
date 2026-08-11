@@ -4,16 +4,38 @@ Nerdy Logs is a Spring Boot web application that allows you to keep track of you
 
 ---
 
+### Requirements
+- Java 17
+- Maven
+- MySQL
+
+---
 ## Technologies Used
 
+### Main application
 - Java 17
 - Spring Boot 3.4
 - Spring MVC
-- Spring Data JPA (Hibernate)
+- Spring Security
+- Spring Data JPA / Hibernate
 - Thymeleaf
+- OpenFeign
+- Spring Cache
+- Spring Scheduling
 - MySQL
 - Maven
 - Lombok
+- JUnit 5 / Mockito / MockMvc / JaCoCo
+
+### Review microservice
+- Java 17
+- Spring Boot 4.1
+- Spring Web / REST
+- Spring Data JPA
+- Spring Cache
+- Spring Scheduling
+- MySQL
+- JUnit 5 / Mockito / MockMvc / JaCoCo
 
 ---
 
@@ -21,116 +43,116 @@ Nerdy Logs is a Spring Boot web application that allows you to keep track of you
 
 ### User
 
-- Register a new account
-- Log into an existing account
-- Browse the public media catalog
-- Search media by title
-- Filter media by genre
-- Add media to a personal library
-- Organize media into:
+- Register and sign in
+- Browse and search the media catalog
+- Filter media by type and genre
+- Add catalog items to a personal library
+- Organize entries as:
   - Watchlist
   - In Progress
   - Completed
   - Dropped
-- Remove media from the personal library
-- Search within personal lists
-- Edit personal profile
-  - Profile picture
-  - Biography
+- Change an existing library entry's status (NEW)
+- Remove entries from the library
+- Search personal lists
+- Add, edit, and delete reviews (NEW)
+- View average ratings (NEW)
+- Edit profile picture and biography
 - Delete own account
-
-NEW: Add personal rating and review to an added item and view average rating from all users who added the item.
 
 ### Administrator
 
-- All user-authorized functionalities
-- Add new media items
-- Delete media items
-- Search the media catalog
-- Search registered users
+- Add, edit, and delete catalog items
+- Search users and catalog items
 - Delete users
-- View the administrator changelog
+- Promote/demote users to ADMIN/USER (NEW)
+- Prevent administrators from changing their own role (NEW)
+- View searchable administrator action history
 
-NEW: Promote/demote users. An admin can not demote themselves.
+---
+
+## Review Microservice
+
+Reviews are handled by a separate Spring Boot REST service running on port 8081.
+
+The main application communicates with it through OpenFeign.
+
+Endpoints:
+
+- `POST /api/reviews`
+- `PUT /api/reviews`
+- `DELETE /api/reviews/{reviewId}`
+- `GET /api/reviews/user/{userId}/media/{mediaId}`
+- `GET /api/reviews/media/{mediaId}/average`
+
+If review retrieval temporarily fails, the main application degrades gracefully instead of making library pages unavailable.
+
+## Security
+
+- BCrypt password hashing
+- Spring Security form login
+- Session-based authentication
+- CSRF protection
+- USER and ADMIN roles
+- `/admin/**` restricted to administrators
+
+## Validation and Error Handling
+
+Jakarta Bean Validation is used for server-side form validation.
+
+Examples include:
+- username length and required fields
+- password minimum length
+- valid email addresses
+- item name/category/genre validation
+- profile bio length
+- profile-picture URL validation
+
+Both applications contain global error handling for application exceptions.
+
+## Caching
+
+The main application caches catalog data.
+
+- Catalog reads use `@Cacheable`
+- Catalog changes invalidate the cache using `@CacheEvict`
+
+The review microservice caches calculated average ratings.
+
+- Average ratings are cached per media item
+- Add/edit/delete review operations invalidate stale averages
+
+## Scheduling
+
+Two Spring scheduled tasks are used:
+
+- The main application clears the catalog cache daily using a cron expression.
+- The review microservice clears cached average ratings every two hours using a fixed-delay trigger.
+
+## Testing
+
+The project includes:
+- Unit tests with JUnit 5 and Mockito
+- API/web-layer tests with MockMvc
+- Integration tests
+- JaCoCo coverage reports
+
+Current line coverage:
+- Main application: 82%
+- Review microservice: 100%
 
 ---
 
 ## Domain Model
 
-The application consists of the following entities:
+### Main application
+- User
+- Item
+- LibraryEntry
+- AdminLog
 
-### User
-
-Stores account information, profile data, and the user's role.
-
-### Item
-
-Represents a media item in the public catalog.
-
-### LibraryEntry
-
-Represents a user's relationship with a media item, including its current status.
-
-### AdminLog
-
-Stores administrative actions such as adding or deleting users and catalog items.
-
----
-
-## Entity Relationships
-
-- One **User** can have many **LibraryEntry** records.
-- One **Item** can appear in many **LibraryEntry** records.
-- Each **LibraryEntry** belongs to exactly one **User** and one **Item**.
-
----
-
-## Authentication
-
-- Passwords are securely hashed using BCrypt.
-- Authentication is session-based.
-- Administrator pages are accessible only to users with the **ADMIN** role.
-
----
-
-## Validation
-
-The application uses **Jakarta Bean Validation** to validate user input.
-
-Examples include:
-
-- Required fields
-- Valid media category selection
-- Required usernames and passwords
-
-Validation errors are displayed directly in the corresponding forms.
-
----
-
-## Project Structure
-
-```text
-src
-├── controller
-├── model
-│   ├── entity
-│   └── dto
-├── repository
-├── service
-├── config
-├── templates
-└── static
-```
-
----
-
-## Running the Project
-
-### Requirements
-
-- Java 17+
-- Maven
-- MySQL
+### Review microservice
+- Review
 
 ---
 
@@ -149,5 +171,3 @@ The original inspiration came from a very real problem: my husband and I used to
 Over time I realized the same thing happened with games. While platforms like Steam provide a library, they don't really help me keep track of what I planned to play next before inevitably getting distracted by something else.
 
 That idea eventually grew into **Nerdy Logs**—a simple application where users can maintain their own watchlists, playlists and reading lists across multiple types of media.
-
-Administrators can expand the shared catalog by adding new items, while users can organize those items into their own personal library. Users can also create custom entries of their own, which can later be personalized with descriptions and cover images.

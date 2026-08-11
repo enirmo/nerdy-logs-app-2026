@@ -4,10 +4,12 @@ import app.client.ReviewClient;
 import app.model.dto.reviews.ReviewCreateRequest;
 import app.model.dto.reviews.ReviewResponse;
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class ReviewIntegrationService {
 
@@ -33,6 +35,9 @@ public class ReviewIntegrationService {
         try {
             return reviewClient.getReview(userId, mediaId);
         } catch (FeignException exception) {
+            log.warn("Could not retrieve review for user {} and media {}",
+                    userId, mediaId);
+
             return null;
         }
     }
@@ -41,6 +46,9 @@ public class ReviewIntegrationService {
         try {
             return reviewClient.getAverageReviews(mediaId);
         } catch (FeignException exception) {
+            log.warn("Could not retrieve average rating for media {}",
+                    mediaId);
+
             return 0.0;
         }
     }

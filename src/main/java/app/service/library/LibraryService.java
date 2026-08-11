@@ -9,6 +9,7 @@ import app.model.entity.user.User;
 import app.repository.item.ItemRepository;
 import app.repository.library.LibraryRepository;
 import app.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import static app.messages.ErrorMessages.*;
 
+@Slf4j
 @Service
 public class LibraryService {
     private final LibraryRepository libraryRepository;
@@ -47,6 +49,9 @@ public class LibraryService {
 
     // Add item to personal library: check for user and item and select status to add with
     public void addItemToLibrary(UUID userId, UUID itemId, EntryStatus status) {
+        log.info("Adding item {} to library for user {} with status {}",
+                itemId, userId, status);
+
         User user = getUserOrThrow(userId);
         Item item = getItemOrThrow(itemId);
 
@@ -62,13 +67,18 @@ public class LibraryService {
         entry.setEntryStatus(status);
 
         libraryRepository.save(entry);
+        log.info("Item {} successfully added to library for user {}",
+                itemId, userId);
     }
 
     // Remove entry from a library
     public void removeFromLibrary(UUID entryId) {
+        log.info("Removing library entry {}", entryId);
+
         LibraryEntry entry = getEntryOrThrow(entryId);
 
         libraryRepository.delete(entry);
+        log.info("Library entry {} removed successfully", entryId);
     }
 
 
@@ -98,8 +108,12 @@ public class LibraryService {
     public void changeEntryStatus(UUID entryId, EntryStatus status) {
         LibraryEntry entry = getEntryOrThrow(entryId);
 
+        EntryStatus oldStatus = entry.getEntryStatus();
+
         entry.setEntryStatus(status);
 
         libraryRepository.save(entry);
+        log.info("Library entry {} status changed from {} to {}",
+                entryId, oldStatus, status);
     }
 }
