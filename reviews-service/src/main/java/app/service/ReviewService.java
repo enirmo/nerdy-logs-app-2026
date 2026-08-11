@@ -7,6 +7,7 @@ import app.model.dto.ReviewCreateRequest;
 import app.model.dto.ReviewResponse;
 import app.model.entity.Review;
 import app.repository.ReviewRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
+@Slf4j
 @Service
 public class ReviewService {
 
@@ -29,6 +30,8 @@ public class ReviewService {
     // 1. Add review (only to existing library items, ONLY if no review already)
     @CacheEvict(value = "reviewAverages", key = "#request.mediaId")
     public void addReview(ReviewCreateRequest request) {
+        log.info("Saving review for user {} and media {}", request.getUserId(), request.getMediaId());
+
         if (reviewRepository.existsByUserIdAndMediaId(request.getUserId(), request.getMediaId())) {
             throw new ReviewAlreadyExistsException(ErrorMessages.REVIEW_ALREADY_EXISTS);
         }
@@ -44,11 +47,14 @@ public class ReviewService {
                 .build();
 
         reviewRepository.save(review);
+        log.info("Review saved for user {} and media {}", review.getUserId(), review.getMediaId());
     }
 
     // 2. Edit review (only if exists)
     @CacheEvict(value = "reviewAverages", key = "#request.mediaId")
     public void editReview(ReviewCreateRequest request) {
+        log.info("Updating review for user {} and media {}", request.getUserId(), request.getMediaId());
+
         Review review = reviewRepository
                 .findByUserIdAndMediaId(request.getUserId(), request.getMediaId())
                 .orElseThrow(() -> new ReviewNotFoundException(ErrorMessages.REVIEW_NOT_FOUND));
@@ -58,6 +64,7 @@ public class ReviewService {
         review.setLastUpdateTime(LocalDateTime.now());
 
         reviewRepository.save(review);
+        log.info("Review updated for user {} and media {}", review.getUserId(), review.getMediaId());
     }
 
     // 3. Delete review (only if exists)
@@ -67,7 +74,10 @@ public class ReviewService {
                 .findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(ErrorMessages.REVIEW_NOT_FOUND));
 
+        log.info("Deleting review for user {} and media {}", reviewToDelete.getUserId() , reviewToDelete.getMediaId());
+
         reviewRepository.delete(reviewToDelete);
+        log.info("Review deleted for user {} and media {}", reviewToDelete.getUserId(), reviewToDelete.getMediaId());
     }
 
     // 4. Get review
