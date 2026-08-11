@@ -61,6 +61,7 @@ public class ListsController {
             ReviewResponse review =
                     reviewIntegrationService.getReview(userId, mediaId);
 
+
             if (review != null) {
                 reviewsByMedia.put(mediaId, review);
             }
@@ -204,6 +205,25 @@ public class ListsController {
         return "redirect:" + redirectTo;
     }
 
+    // CHANGE entry list
+    @PostMapping("/library/status")
+    public String changeEntryStatus(
+            @RequestParam UUID entryId,
+            @RequestParam EntryStatus status,
+            @RequestParam String redirectTo,
+            RedirectAttributes redirectAttributes) {
 
+        try {
+            libraryService.changeEntryStatus(entryId, status);
+
+        } catch (IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    exception.getMessage()
+            );
+        }
+
+        return "redirect:" + redirectTo;
+    }
 }
 

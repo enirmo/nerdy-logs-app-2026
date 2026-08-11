@@ -556,3 +556,61 @@ body {
     background: rgba(180, 55, 85, 0.55);
 }
 
+.status-form {
+    margin-top: 12px;
+    padding-top: 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.status-select {
+    flex: 1;
+    min-width: 0;
+
+    padding: 7px 8px;
+
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+
+    background: var(--purple-deep);
+    color: var(--text-main);
+
+    font-family: inherit;
+    font-size: 0.75rem;
+
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select:focus {
+    border-color: var(--pink-soft);
+}
+
+.status-btn {
+    flex-shrink: 0;
+
+    padding: 7px 9px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-main);
+
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.status-btn:hover {
+    background: var(--pink-soft);
+    color: var(--bg-dark);
+}
+

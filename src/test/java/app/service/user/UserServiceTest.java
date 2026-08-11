@@ -1,7 +1,6 @@
 package app.service.user;
 
 import app.config.UserProperties;
-import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
 import app.model.entity.user.Role;
 import app.model.entity.user.User;

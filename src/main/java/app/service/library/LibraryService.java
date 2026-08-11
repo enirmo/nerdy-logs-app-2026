@@ -94,4 +94,12 @@ public class LibraryService {
                         search
                 );
     }
+
+    public void changeEntryStatus(UUID entryId, EntryStatus status) {
+        LibraryEntry entry = getEntryOrThrow(entryId);
+
+        entry.setEntryStatus(status);
+
+        libraryRepository.save(entry);
+    }
 }

@@ -364,4 +364,55 @@ public class LibraryServiceTest {
 
         assertEquals(USER_NOT_FOUND, exception.getMessage());
     }
+
+
+    // Change entry status tests
+    @Test
+    void changeEntryStatusChangesStatusAndSavesEntry() {
+
+        UUID entryId = UUID.randomUUID();
+
+        LibraryEntry entry = new LibraryEntry();
+        entry.setEntryStatus(EntryStatus.PLANNED);
+
+        when(libraryRepository.findById(entryId))
+                .thenReturn(Optional.of(entry));
+
+        libraryService.changeEntryStatus(
+                entryId,
+                EntryStatus.COMPLETED
+        );
+
+        assertEquals(
+                EntryStatus.COMPLETED,
+                entry.getEntryStatus()
+        );
+
+        verify(libraryRepository).save(entry);
+    }
+
+    @Test
+    void changeEntryStatusThrowsExceptionWhenEntryDoesNotExist() {
+
+        UUID entryId = UUID.randomUUID();
+
+        when(libraryRepository.findById(entryId))
+                .thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> libraryService.changeEntryStatus(
+                        entryId,
+                        EntryStatus.COMPLETED
+                )
+        );
+
+        assertEquals(
+                ENTRY_NOT_FOUND,
+                exception.getMessage()
+        );
+
+        verify(libraryRepository, never())
+                .save(any(LibraryEntry.class));
+    }
 }

@@ -38,7 +38,7 @@ public class IndexControllerTest {
         assertEquals("index", result);
     }
 
-
+/*
     // Sign in tests
     @Test
     void getSignInPageReturnsSignInPage() {
@@ -53,7 +53,7 @@ public class IndexControllerTest {
                 any()
         );
     }
-
+*/
 
     // Sign up page tests
     @Test

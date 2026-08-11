@@ -1,6 +1,5 @@
 package app.web;
 
-import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
 import app.service.user.UserService;
 import jakarta.validation.Valid;
@@ -24,14 +23,11 @@ public class IndexController {
             return "index";
         }
 
-    // LOGIN MAP and POST
     @GetMapping("/sign-in")
-    public String getSignInPage(Model model) {
-        model.addAttribute("userLoginRequest", new UserLoginRequest());
+    public String getSignInPage() {
         return "sign_in_pages/sign-in";
     }
 
-    // REGISTER MAP and POST
     @GetMapping("/sign-up")
     public String getSignUpPage(Model model) {
         model.addAttribute("userRegisterRequest", new UserRegisterRequest());

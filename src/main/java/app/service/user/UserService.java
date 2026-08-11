@@ -70,10 +70,8 @@ public class UserService {
                  .createdOn(now)
                  .updatedOn(now)
                  .build();
-         user = userRepository.save(user);
+         userRepository.save(user);
     }
-
-
 
     // Update profile - user side
     public void updateProfile(UUID userId, String profilePicture, String bio) {

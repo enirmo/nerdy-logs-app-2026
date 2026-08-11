@@ -32,12 +32,16 @@ public class ReviewIntegrationService {
     public ReviewResponse getReview(UUID userId, UUID mediaId) {
         try {
             return reviewClient.getReview(userId, mediaId);
-        } catch (FeignException.NotFound exception) {
+        } catch (FeignException exception) {
             return null;
         }
     }
 
     public Double getAverageReviews(UUID mediaId) {
-        return reviewClient.getAverageReviews(mediaId);
+        try {
+            return reviewClient.getAverageReviews(mediaId);
+        } catch (FeignException exception) {
+            return 0.0;
+        }
     }
 }

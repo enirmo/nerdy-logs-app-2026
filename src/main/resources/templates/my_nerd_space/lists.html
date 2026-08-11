@@ -302,6 +302,33 @@
                     </form>
 
                 </div>
+
+                <form th:action="@{/library/status}"
+                      method="post"
+                      class="status-form">
+
+                    <input type="hidden"
+                           name="entryId"
+                           th:value="${entry.id}">
+
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="status" class="status-select">
+                        <option th:each="status : ${T(app.model.entity.libraryentry.EntryStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+
+                    <button type="submit"
+                            class="status-btn">
+                        Change status
+                    </button>
+
+                </form>
+
             </article>
         </div>
     </section>
@@ -475,6 +502,32 @@
                     </form>
 
                 </div>
+
+                <form th:action="@{/library/status}"
+                      method="post"
+                      class="status-form">
+
+                    <input type="hidden"
+                           name="entryId"
+                           th:value="${entry.id}">
+
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="status" class="status-select">
+                        <option th:each="status : ${T(app.model.entity.libraryentry.EntryStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+
+                    <button type="submit"
+                            class="status-btn">
+                        Change status
+                    </button>
+
+                </form>
 
 
             </article>
@@ -651,6 +704,32 @@
 
                 </div>
 
+                <form th:action="@{/library/status}"
+                      method="post"
+                      class="status-form">
+
+                    <input type="hidden"
+                           name="entryId"
+                           th:value="${entry.id}">
+
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="status" class="status-select">
+                        <option th:each="status : ${T(app.model.entity.libraryentry.EntryStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+
+                    <button type="submit"
+                            class="status-btn">
+                        Change status
+                    </button>
+
+                </form>
+
             </article>
         </div>
     </section>
@@ -825,6 +904,32 @@
 
                 </div>
 
+                <form th:action="@{/library/status}"
+                      method="post"
+                      class="status-form">
+
+                    <input type="hidden"
+                           name="entryId"
+                           th:value="${entry.id}">
+
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="status" class="status-select">
+                        <option th:each="status : ${T(app.model.entity.libraryentry.EntryStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+
+                    <button type="submit"
+                            class="status-btn">
+                        Change status
+                    </button>
+
+                </form>
+
             </article>
         </div>
     </section>
@@ -998,6 +1103,32 @@
                     </form>
 
                 </div>
+
+                <form th:action="@{/library/status}"
+                      method="post"
+                      class="status-form">
+
+                    <input type="hidden"
+                           name="entryId"
+                           th:value="${entry.id}">
+
+                    <input type="hidden"
+                           name="redirectTo"
+                           th:value="${currentPath}">
+
+                    <select name="status" class="status-select">
+                        <option th:each="status : ${T(app.model.entity.libraryentry.EntryStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+
+                    <button type="submit"
+                            class="status-btn">
+                        Change status
+                    </button>
+
+                </form>
 
             </article>
         </div>

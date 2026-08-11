@@ -486,4 +486,61 @@ public class ListsControllerTest {
                 "Entry not found"
         );
     }
+
+
+    // Change entry status tests
+    @Test
+    void changeEntryStatusChangesStatusAndRedirects() {
+
+        UUID entryId = UUID.randomUUID();
+
+        String result =
+                listsController.changeEntryStatus(
+                        entryId,
+                        EntryStatus.COMPLETED,
+                        "/watchlist",
+                        redirectAttributes
+                );
+
+        assertEquals(
+                "redirect:/watchlist",
+                result
+        );
+
+        verify(libraryService).changeEntryStatus(
+                entryId,
+                EntryStatus.COMPLETED
+        );
+    }
+
+    @Test
+    void changeEntryStatusShowsErrorWhenChangeFails() {
+
+        UUID entryId = UUID.randomUUID();
+
+        doThrow(new IllegalArgumentException("Entry not found"))
+                .when(libraryService)
+                .changeEntryStatus(
+                        entryId,
+                        EntryStatus.COMPLETED
+                );
+
+        String result =
+                listsController.changeEntryStatus(
+                        entryId,
+                        EntryStatus.COMPLETED,
+                        "/watchlist",
+                        redirectAttributes
+                );
+
+        assertEquals(
+                "redirect:/watchlist",
+                result
+        );
+
+        verify(redirectAttributes).addFlashAttribute(
+                "errorMessage",
+                "Entry not found"
+        );
+    }
 }
