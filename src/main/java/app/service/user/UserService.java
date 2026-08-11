@@ -1,7 +1,5 @@
 package app.service.user;
 import app.config.UserProperties;
-import app.exceptions.ResourceAlreadyExistsException;
-import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
 import app.model.entity.user.Role;
 import app.model.entity.user.User;
@@ -73,33 +71,9 @@ public class UserService {
                  .updatedOn(now)
                  .build();
          user = userRepository.save(user);
-
-        // 3. Create empty library for new user
-        //LibraryService.createDefaultLibrary(user);
-
-
-        // To self: No point in bringing this to mapper, when register() has the job of creating
-        // the User itself
-        // Note that most of these comments I made for myself during creation to keep the project structured while learning
     }
 
 
-
-    // Login
-    public User login(UserLoginRequest userLoginRequest) {
-        User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow(() -> new IllegalArgumentException(USERNAME_DOES_NOT_EXIST));
-
-        boolean passwordMatches = passwordEncoder.matches(
-                        userLoginRequest.getPassword(),
-                        user.getPassword()
-        );
-
-        if (!passwordMatches) {
-            throw new IllegalArgumentException(WRONG_PASSWORD);
-        }
-
-        return user;
-    }
 
     // Update profile - user side
     public void updateProfile(UUID userId, String profilePicture, String bio) {

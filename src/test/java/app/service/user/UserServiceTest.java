@@ -8,7 +8,6 @@ import app.model.entity.user.User;
 import app.repository.library.LibraryRepository;
 import app.repository.user.UserRepository;
 import app.service.adminlog.AdminLogService;
-import app.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static app.messages.ErrorMessages.*;
@@ -231,79 +229,6 @@ public class UserServiceTest {
         verify(userRepository).findByUsername("user");
         verify(userRepository).findByEmail("user@email.com");
         verify(userRepository, never()).save(any(User.class));
-    }
-
-
-    // Login tests
-    @Test
-    void loginWhenDetailsAreValid() {
-        User user = User.builder()
-                .username("user")
-                .email("user@email.com")
-                .password("password")
-                .build();
-
-        UserLoginRequest request = UserLoginRequest.builder()
-                .username("user")
-                .password("password")
-                .build();
-
-        when(userRepository.findByUsername("user"))
-                .thenReturn(Optional.of(user));
-        when(passwordEncoder.matches("password", "password"))
-                .thenReturn(true);
-
-        User result = userService.login(request);
-
-        assertEquals(user, result);
-
-        verify(userRepository).findByUsername("user");
-        verify(passwordEncoder).matches("password", "password");
-    }
-
-    @Test
-    void loginThrowsExceptionWhenUsernameDoesNotExist() {
-
-        UserLoginRequest request = UserLoginRequest.builder()
-                .username("user")
-                .password("password")
-                .build();
-
-        when(userRepository.findByUsername("user"))
-                .thenReturn(Optional.empty());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userService.login(request)
-        );
-
-        assertEquals(USERNAME_DOES_NOT_EXIST, exception.getMessage());
-    }
-
-    @Test
-    void loginThrowsExceptionWhenPasswordInvalid() {
-        User user = User.builder()
-                .username("user")
-                .email("user@email.com")
-                .password("password")
-                .build();
-
-        UserLoginRequest request = UserLoginRequest.builder()
-                .username("user")
-                .password("password123")
-                .build();
-
-        when(userRepository.findByUsername("user"))
-                .thenReturn(Optional.of(user));
-        when(passwordEncoder.matches("password123", "password"))
-                .thenReturn(false);
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userService.login(request)
-        );
-
-        assertEquals(WRONG_PASSWORD, exception.getMessage());
     }
 
 

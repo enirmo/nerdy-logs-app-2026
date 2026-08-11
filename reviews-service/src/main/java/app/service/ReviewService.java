@@ -7,6 +7,8 @@ import app.model.dto.ReviewCreateRequest;
 import app.model.dto.ReviewResponse;
 import app.model.entity.Review;
 import app.repository.ReviewRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class ReviewService {
     }
 
     // 1. Add review (only to existing library items, ONLY if no review already)
+    @CacheEvict(value = "reviewAverages", key = "#request.mediaId")
     public void addReview(ReviewCreateRequest request) {
         if (reviewRepository.existsByUserIdAndMediaId(request.getUserId(), request.getMediaId())) {
             throw new ReviewAlreadyExistsException(ErrorMessages.REVIEW_ALREADY_EXISTS);
@@ -44,6 +47,7 @@ public class ReviewService {
     }
 
     // 2. Edit review (only if exists)
+    @CacheEvict(value = "reviewAverages", key = "#request.mediaId")
     public void editReview(ReviewCreateRequest request) {
         Review review = reviewRepository
                 .findByUserIdAndMediaId(request.getUserId(), request.getMediaId())
@@ -57,6 +61,7 @@ public class ReviewService {
     }
 
     // 3. Delete review (only if exists)
+    @CacheEvict(value = "reviewAverages", allEntries = true)
     public void deleteReview(UUID reviewId) {
         Review reviewToDelete = reviewRepository
                 .findById(reviewId)
@@ -79,6 +84,7 @@ public class ReviewService {
     }
 
     // 5. Get average of reviews for this media
+    @Cacheable(value = "reviewAverages", key = "#mediaID")
     public double getAverageReviews(UUID mediaID) {
         List<Review> reviewsList = reviewRepository.findAllByMediaId(mediaID);
         double sum = 0.0;

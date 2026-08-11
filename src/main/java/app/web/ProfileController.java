@@ -9,11 +9,14 @@ import app.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import app.model.dto.item.ItemRequest;
 import app.model.entity.item.Genre;
@@ -21,6 +24,7 @@ import app.model.entity.item.Medium;
 
 import java.util.UUID;
 
+@Validated
 @Controller
 public class ProfileController {
 
@@ -49,14 +53,26 @@ public class ProfileController {
 
     // Edit user profile
     @PostMapping("/profile/edit")
-    public String editProfile(@RequestParam String profilePicture,
-                              @RequestParam String bio,
-                              Authentication authentication) {
+    public String editProfile(
+            @RequestParam
+            @URL
+            String profilePicture,
+
+            @RequestParam
+            @Size(max = 300) String bio,
+            Authentication authentication) {
 
         User user = userService.getByUsername(authentication.getName());
-        UUID userId = user.getId();
 
-        userService.updateProfile(userId, profilePicture, bio);
+        if (profilePicture.isBlank()) {
+            profilePicture = user.getProfilePicture();
+        }
+
+        userService.updateProfile(
+                user.getId(),
+                profilePicture,
+                bio
+        );
 
         return "redirect:/profile";
     }

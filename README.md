@@ -19,16 +19,13 @@ Nerdy Logs is a Spring Boot web application that allows you to keep track of you
 
 ## Features
 
-### Guest
+### User
 
 - Register a new account
 - Log into an existing account
 - Browse the public media catalog
 - Search media by title
 - Filter media by genre
-
-### User
-
 - Add media to a personal library
 - Organize media into:
   - Watchlist
@@ -42,14 +39,19 @@ Nerdy Logs is a Spring Boot web application that allows you to keep track of you
   - Biography
 - Delete own account
 
+NEW: Add personal rating and review to an added item and view average rating from all users who added the item.
+
 ### Administrator
 
+- All user-authorized functionalities
 - Add new media items
 - Delete media items
 - Search the media catalog
 - Search registered users
 - Delete users
 - View the administrator changelog
+
+NEW: Promote/demote users. An admin can not demote themselves.
 
 ---
 

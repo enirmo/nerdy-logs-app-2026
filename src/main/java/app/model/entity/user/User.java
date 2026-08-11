@@ -49,10 +49,6 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<LibraryEntry> libraryEntries = new ArrayList<>();
 
-    @Column(length = 1000)
+    @Size(max = 300)
     private String bio;
-
-
-
-    // Note to self: no list for items needed, as the user does not OWN the items, he just uses them
 }

@@ -6,6 +6,8 @@ import app.model.entity.item.Item;
 import app.model.entity.item.Medium;
 import app.repository.item.ItemRepository;
 import app.service.adminlog.AdminLogService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class ItemService {
 
 
     // Check if the item already exists and add it if not
+    @CacheEvict(value = "items", allEntries = true)
     public void createItem(ItemRequest itemRequest) {
         itemRepository.findByName(itemRequest.getItemName())
                 .ifPresent(item -> {
@@ -60,7 +63,7 @@ public class ItemService {
         return item;
     }
 
-
+    @Cacheable("items")
     public List<Item> getAllItems() {
         List<Item> items = itemRepository.findAll();
 
@@ -79,6 +82,7 @@ public class ItemService {
 
 
     // Update
+    @CacheEvict(value = "items", allEntries = true)
     public void updateItem(UUID itemId, ItemRequest request) {
         Item item = getItemOrThrow(itemId);
 
@@ -93,6 +97,7 @@ public class ItemService {
     }
 
     // Delete
+    @CacheEvict(value = "items", allEntries = true)
     public void deleteItem(UUID itemId) {
         Item item = getItemOrThrow(itemId);
 
