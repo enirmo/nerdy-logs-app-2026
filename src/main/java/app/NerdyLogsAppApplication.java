@@ -17,19 +17,4 @@ public class NerdyLogsAppApplication {
         SpringApplication.run(NerdyLogsAppApplication.class, args);
     }
 
-
-    // Only uncomment this if you would like to test with more items already added to database; this is set up in TestData, under app.config
-    //--------------------------------------------------
-
-    /*
-    @Bean
-    CommandLineRunner loadTestData(ItemService itemService) {
-        return args -> {
-            if (itemService.getAllItems().isEmpty()) {
-                TestData.load(itemService);
-            }
-        };
-    }
-    */
-
 }
